@@ -22,15 +22,18 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=30, blank=False)
     email = models.EmailField(unique=True, blank=False)
-    phone_number = models.CharField(blank=True, max_length=16)
-    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
-    courses = models.ManyToManyField(Courses)
-    current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
-    is_student = models.BooleanField(blank=False)
+    is_student = models.BooleanField('Are you a student?',blank=False)
 
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name','last_name','username','is_student','password']
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(blank=True, max_length=16)
+    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
+    courses = models.ManyToManyField(Courses)
+    current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
 
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
@@ -51,6 +54,9 @@ class Question(models.Model):
             return queryset.order_by()
         return queryset
     
+    def __str__(self) -> str:
+        return self.content
+    
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
     content = models.TextField()
@@ -69,6 +75,8 @@ class Quiz(models.Model):
     start_time =models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField()
 
+    def __str__(self) -> str:
+        return self.title
 
     # creating options field from opt1... opt4 by overiding the save() method
     """
@@ -92,5 +100,8 @@ class Result(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     score = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.student.first_name
 
 

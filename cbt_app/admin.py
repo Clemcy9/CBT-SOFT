@@ -10,5 +10,6 @@ class QuestionAdmin(admin.ModelAdmin):
     # fields =['__all__']
     inlines = [QuestionInline]
 
+
 admin.site.register([Discipline,Level,Courses,User,Quiz,Result,Choice])
 admin.site.register(Question,QuestionAdmin)
