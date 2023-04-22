@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul style="list-style: none; display: flex; width: 80vw; justify-content: space-between;">
+        <li><a href="{% url 'auth1:home' %}">Home</a></li>
+        {% if user %}
+        <li><a href="{% url 'auth1:profile' user %}">My profile</a></li>
+
+        {% endif %}
+        <li><a href="{% url 'auth1:reg' %}">Sign Up</a></li>
+        <li><a href="{% url 'auth1:login' %}">Sign In</a></li>
+        <li><a href="{% url 'auth1:logout' %}">Sign Out</a></li>
+    </ul>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

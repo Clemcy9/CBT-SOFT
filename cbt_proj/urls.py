@@ -20,6 +20,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('quiz/', include('cbt_app.urls')),
+    path('auth/',include('auth1.urls')),
     path('', view=RedirectView.as_view(url='quiz/'))
     
 ]
