@@ -3,7 +3,7 @@
 <div class="parent" style="display: flex; width: 100vw; height: 80vh;justify-content: center; align-items:center ;">
     <div class="container" style=" border-radius: 5px; background-color: #f2f2f2; padding: 20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <h2>
-            Register route
+            Login page
         </h2>
         <form action="" method="post">
             <table style="width: 100%; border-spacing: 3px;">
@@ -21,6 +21,12 @@
 
                     </tr>
                     {% endfor %}
+                    <tr>
+                        {% for message in messages %}
+                        <p style="background-color:rgba(233, 73, 97, 0.641); text-align: center; padding: .2em; font-size: small;">{{message|upper}}</p>
+                        {% endfor %}
+
+                    </tr>
                     
                 </table>
             

@@ -6,6 +6,7 @@ from .forms import RegisterForm
 # Create your views here.
 
 def index(request):
+    return render(request, 'index.html')
     return HttpResponse('Home Page')
 
 def register(request):

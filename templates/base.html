@@ -9,7 +9,7 @@
 </head>
 <body>
     <ul style="list-style: none; display: flex; width: 80vw; justify-content: space-between;">
-        <li><a href="{% url 'auth1:home' %}">Home</a></li>
+        <li><a href="{% url 'cbt_app:index' %}">Home</a></li>
         {% if user %}
         <li><a href="{% url 'auth1:profile' user %}">My profile</a></li>
 

@@ -4,7 +4,7 @@ from . import views as vi
 app_name ='auth1'
 
 urlpatterns = [
-    path('',vi.home, name='home'),
+    # path('',vi.home, name='home'),
     path('reg/',vi.register,name='reg'),
     path('login/',vi.login_view,name='login'),
     path('logout/',vi.logout_view,name='logout'),
