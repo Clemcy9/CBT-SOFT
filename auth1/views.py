@@ -24,14 +24,15 @@ def login_view(request):
                 password = form.cleaned_data['password']
                 # password = request.POST['password']
                 user = authenticate(email=email, password=password)
-                next1 = request.META['QUERY_STRING']
-                next = next1.split(sep='=')[1]
+                next = request.META['QUERY_STRING']
+                
                 # ''.split(sep='=')
                 print(f'user =:{user}, NEXT1={next}\ntype is:{type(next)}')
                 if user is not None:
                     login(request,user)
                     # must pass the app name into the reverse() for named app url hence 'auth1:profile'
                     if next:
+                        next = next.split(sep='=')[1]
                         print('next provided')
                         return HttpResponseRedirect(next,user)
                     else:
@@ -63,7 +64,16 @@ def register(request):
             form = RegisterForm(request.POST)
             if form.is_valid():
                 form.save()
-                messages.success(request,'User registered successful,\n please login')
+                # form.save doesnt make the data a valid user hence we use user.create_user to achieve that
+
+                # form.cleaned_data converts it to approved data base format whereas request.POST brings in the raw htmltag value
+                # e.g form.cleaned_data of toggle btn = True or False | request.POST = on or off
+                print(f"this is form.cleaned_data toggle btn :{form.cleaned_data['is_student']}")
+                print(f"this is request.post toggle btn :{request.POST['is_student']}")
+
+                user = User.objects.create_user(email=form.cleaned_data['email'],first_name=form.cleaned_data['first_name'],last_name=form.cleaned_data['last_name'],username=form.cleaned_data['username'],is_student = form.cleaned_data['is_student'])
+                # user.save()
+                messages.success(request,f'{user} registered successful,\n please login')
                 print('form is valid')
                 return HttpResponseRedirect(reverse('auth1:login',))
             else:

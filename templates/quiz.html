@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <form action="">
+        {% csrf_token %}
+        {% for question in contents %}
+        <legend>
+            <h3>{{question.content}}</h3>
+        </legend>
+        {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+        {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice{{choice.id}}" id="{{choice.id}}" value="{{choice.is_answer}}">
+        <label for="choice{{choice.id}}">{{choice.content}}</label> <br>
+        {% endfor %}
+        {% endfor %}
+        <input type="submit" value="submit">
+    </form>
+    {% for question in contents %}
+    <div class="question">
+        <h3>{{question.content}}</h3>
+
+        <div class="choice">
+            {% for choice in question.choice_set.all %}
+            <input type="radio" id="{{choice.id}}">{{choice}} <br>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

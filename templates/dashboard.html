@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="width: 100vw; display: flex; justify-content: center;">
+    <div class="parent">
+        <h1>
+            User Dashboard
+        </h1>
+        <table style="width: 100%;">
+            <tr>
+                <thead>Available Exams</thead>
+            </tr>
+            <tr>
+                <th>Exams Title</th>
+                <th>Subject(course)</th>
+                <th>Class(level)</th>
+                <th>Duration (min)</th>
+
+            </tr>
+            {% for quiz in contents %}
+            <tr>
+                <td><a href="{% url 'cbt_app:take_quiz' quiz.id %}">{{quiz}}</a></td>
+                <td>{{quiz.course}}</td>
+                <td>{{quiz.level}}</td>
+                <td>{{quiz.duration}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

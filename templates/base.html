@@ -6,17 +6,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+        </style>
 </head>
 <body>
+    <h1>hello {{user.is_authenticated}}</h1>
     <ul style="list-style: none; display: flex; width: 80vw; justify-content: space-between;">
         <li><a href="{% url 'cbt_app:index' %}">Home</a></li>
-        {% if user %}
-        <li><a href="{% url 'auth1:profile' user %}">My profile</a></li>
+        {% if user.is_authenticated %}
 
-        {% endif %}
+        <li><a href="{% url 'auth1:profile' user %}">My profile</a></li>
+        <li><a href="{% url 'cbt_app:dashboard' %}">My Dashboard</a></li>
+       
+        <li><a href="{% url 'auth1:logout' %}">Sign Out</a></li>
+        {% else %}
         <li><a href="{% url 'auth1:reg' %}">Sign Up</a></li>
         <li><a href="{% url 'auth1:login' %}">Sign In</a></li>
-        <li><a href="{% url 'auth1:logout' %}">Sign Out</a></li>
+        {% endif %}
     </ul>
     {% block content %}
     {% endblock %}

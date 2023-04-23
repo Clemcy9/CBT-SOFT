@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 # Create your models here.
 class Discipline(models.Model):
@@ -18,23 +18,17 @@ class Courses(models.Model):
     def __str__(self):
         return self.level.name +' '+ self.name
 
-class User(AbstractUser):
-    first_name = models.CharField(max_length=30, blank=False)
-    last_name = models.CharField(max_length=30, blank=False)
-    email = models.EmailField(unique=True, blank=False)
-    is_student = models.BooleanField('Are you a student?',blank=False)
-
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name','last_name','username','is_student','password']
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(blank=True, max_length=16)
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
     courses = models.ManyToManyField(Courses)
     current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
 
+    def __str__(self) -> str:
+        return self.user
+    
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
     ('random', ('Random')),
@@ -67,16 +61,17 @@ class Choice(models.Model):
 
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
-    examiner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    examiner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     questions = models.ManyToManyField(Question)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE,null=True)
-    duration = models.TimeField()
+    single_attempt = models.BooleanField(blank=False, default=True)
+    duration = models.IntegerField(help_text='duration in minutes')
     start_time =models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField()
 
     def __str__(self) -> str:
-        return self.title
+        return self.level.name+' ' + self.title
 
     # creating options field from opt1... opt4 by overiding the save() method
     """
@@ -97,7 +92,7 @@ class Quiz(models.Model):
     """
 
 class Result(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     score = models.IntegerField()
 
