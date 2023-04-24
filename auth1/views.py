@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from cbt_app.models import User
+from .models import User
 from .forms import RegisterForm, LoginForm
 #i love you == i gave him my words and though he disbelieves me, i not back on my words
 
@@ -63,16 +63,16 @@ def register(request):
         if request.method == 'POST':
             form = RegisterForm(request.POST)
             if form.is_valid():
-                form.save()
+                # form.save()
                 # form.save doesnt make the data a valid user hence we use user.create_user to achieve that
 
                 # form.cleaned_data converts it to approved data base format whereas request.POST brings in the raw htmltag value
                 # e.g form.cleaned_data of toggle btn = True or False | request.POST = on or off
                 print(f"this is form.cleaned_data toggle btn :{form.cleaned_data['is_student']}")
-                print(f"this is request.post toggle btn :{request.POST['is_student']}")
+                # print(f"this is request.post toggle btn :{request.POST['is_student']}")
 
-                user = User.objects.create_user(email=form.cleaned_data['email'],first_name=form.cleaned_data['first_name'],last_name=form.cleaned_data['last_name'],username=form.cleaned_data['username'],is_student = form.cleaned_data['is_student'])
-                # user.save()
+                user = User.objects.create_user(email=form.cleaned_data['email'],first_name=form.cleaned_data['first_name'],last_name=form.cleaned_data['last_name'],username=form.cleaned_data['username'],is_student = form.cleaned_data['is_student'], password = form.cleaned_data['password'])
+                user.save()
                 messages.success(request,f'{user} registered successful,\n please login')
                 print('form is valid')
                 return HttpResponseRedirect(reverse('auth1:login',))

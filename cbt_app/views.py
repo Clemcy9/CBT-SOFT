@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from .models import Discipline, Level, Courses, User,Question, Choice, Result, Quiz
-from .forms import RegisterForm
+from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz
+
 
 # Create your views here.
 
 def index(request):
     return render(request, 'index.html')
-    return HttpResponse('Home Page')
 
 '''
 def register(request):

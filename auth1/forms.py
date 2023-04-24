@@ -1,5 +1,5 @@
 from django import forms
-from cbt_app.models import User
+from .models import User
 
 
 class RegisterForm(forms.ModelForm):

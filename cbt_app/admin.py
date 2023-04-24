@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Discipline,Level,Courses,User,Question,Quiz,Result,Choice
+from .models import Discipline,Level,Courses,Question,Quiz,Result,Choice
 
 # Register your models here.
 
