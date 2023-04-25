@@ -25,6 +25,9 @@ def login_view(request):
                 # password = request.POST['password']
                 user = authenticate(email=email, password=password)
                 next = request.META['QUERY_STRING']
+                # a simpler way to get query params with name next
+                next11 = request.GET.get('next')
+                print(f'this is next.GET(): {next11}')
                 
                 # ''.split(sep='=')
                 print(f'user =:{user}, NEXT1={next}\ntype is:{type(next)}')
