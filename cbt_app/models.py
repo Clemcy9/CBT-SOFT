@@ -59,6 +59,12 @@ class Choice(models.Model):
     def __str__(self) -> str:
         return self.content
 
+# model to store user choice for mcq
+class UserGuess(models.Model):
+    question = models.ForeignKey(Question,null=True, on_delete=models.CASCADE)
+    # guess = models.ForeignKey(Choice,on_delete=models.DO_NOTHING, null=True, )
+    guess = models.CharField(max_length=200)
+
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
     examiner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)

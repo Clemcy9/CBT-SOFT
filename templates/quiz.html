@@ -2,25 +2,29 @@
 
 {% block content %}
 <div class="container">
-    <form action="">
+    <!-- <form action="{% url 'cbt_app:quiz_progress' %}" method="post">
         {% csrf_token %}
+        
         {% for question in page_obj %}
             <legend>
                 <h3>{{question.content}}</h3>
             </legend>
             {% if error_message %}
-                <p><strong>{{ error_message }}</strong></p>
+            <p><strong>{{ error_message }}</strong></p>
             {% endif %}
             <fieldset >
-
+                
+                <input type="hidden" value="{{page_obj.contents}}" name="questions">
+                <input type="hidden" value="{{question}}" name="question{{question.id}}">
                 {% for choice in question.choice_set.all %}
-                    <input type="radio" name="choice{{choice.id}}"  value="{{choice.is_answer}}">
+                    <input type="radio" name="choice{{choice.id}}"  value="{{choice.is_answer}}"> 
+                    <input type="radio" name="choice{{choice.id}}"  value="{{choice.id}}">
                     <label for="choice{{choice.id}}">{{choice.content}}</label> <br>
                 {% endfor %}
             </fieldset>
         {% endfor %}
         <input type="submit" value="submit">
-    </form>
+    </form> -->
 
     <div class="pagination"> <span class="step-links">
         {% if page_obj.has_previous %}
@@ -45,5 +49,10 @@
         </div>
     </div>
     {% endfor %} -->
+
+    {% for form in formset %}
+        {{form.as_p}}
+        <p>hello</p>
+    {% endfor %}
 </div>
 {% endblock %}
