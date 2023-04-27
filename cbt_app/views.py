@@ -33,19 +33,19 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context)
 
-# @login_required
-# def take_quiz(request,quiz_id):
-#     quiz = Quiz.objects.get(id=quiz_id)
-#     contents = Question.objects.filter(quiz__id = quiz_id).order_by('?')
-#     paginator = Paginator(contents, 2)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     context = {
-#         'contents':contents,
-#         'page_obj':page_obj
-#     }
-#     return render(request, 'quiz.html', context)
-
+@login_required
+def take_quiz(request,quiz_id):
+    quiz = Quiz.objects.get(id=quiz_id)
+    contents = Question.objects.filter(quiz__id = quiz_id).order_by('?')
+    paginator = Paginator(contents, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'contents':contents,
+        'page_obj':page_obj
+    }
+    return render(request, 'quiz.html', context)
+"""
 @login_required
 def take_quiz(request,quiz_id):
     quiz = Quiz.objects.get(id=quiz_id)
@@ -55,8 +55,7 @@ def take_quiz(request,quiz_id):
     page_obj = paginator.get_page(page_number)
     
     data = [
-         {'question':x.id,} for x in contents
-        # {'question':x,'guess':x.choice_set.all()} for x in contents
+        {'question':x,'guess':x.choice_set.all()} for x in contents
         # {
         #     'question':'how old was Jesus when he died',
         #     'choices' :[1,23,45,33]
@@ -72,7 +71,7 @@ def take_quiz(request,quiz_id):
         'formset': QuizFormSet
     }
     return render(request, 'quiz.html', context)
-
+"""
 
 
 def mark_quiz(result):

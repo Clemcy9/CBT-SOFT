@@ -22,7 +22,9 @@ from .models import UserGuess, Choice
 
 class QuizForm(forms.Form):
     question = forms.CharField()
-    guess =forms.ModelChoiceField()
+    choice = forms.BooleanField()
+
+    # guess =forms.ModelChoiceField(queryset=None)
 
     # def __init__(self,*args, **kwargs):
     #     super().__init__(*args, **kwargs)
