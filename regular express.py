@@ -29,14 +29,14 @@ def match_question_with_choice(querydict):
             print('no match found')
     return question_answer_pair
 
-# testing
-content3 ={
-    'csrfmiddlewaretoken': ['JsL0S1OoeGKJlomeW27jg4orwLM0v57etUWcuL9ncJAuN77PSceRSPTo8eintTdz'], 'question2': ['2'], 
-    'choice2': ['4'], 
-    'question1': ['1'], 
-    'choice1': ['2'], 
-    'question3': ['3'], 
-    'choice3': ['9']
-    }
+# # testing
+# content3 ={
+#     'csrfmiddlewaretoken': ['JsL0S1OoeGKJlomeW27jg4orwLM0v57etUWcuL9ncJAuN77PSceRSPTo8eintTdz'], 'question2': ['2'], 
+#     'choice2': ['4'], 
+#     'question1': ['1'], 
+#     'choice1': ['2'], 
+#     'question3': ['3'], 
+#     'choice3': ['9']
+#     }
 
-print(f'testing {match_question_with_choice(content3)}')
+# print(f'testing {match_question_with_choice(content3)}')
