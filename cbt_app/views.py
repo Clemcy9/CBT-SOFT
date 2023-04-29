@@ -38,7 +38,7 @@ def dashboard(request):
 def take_quiz(request,quiz_id):
     quiz = Quiz.objects.get(id=quiz_id)
     contents = Question.objects.filter(quiz__id = quiz_id).order_by('?')
-    paginator = Paginator(contents, 2)
+    paginator = Paginator(contents, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -112,7 +112,10 @@ def quiz_progress(request):
     if request.method == 'POST':
         questions = request.POST
         print(f'questions are:{questions}')
-        data = serializers.serialize('json',questions)
-        print(f'serialized questions:{data}')
+
+        # can't serialize querydict
+        # data = serializers.serialize('json',questions)
+        # print(f'serialized questions:{data}')
+
         return HttpResponse('post received successfully')
     

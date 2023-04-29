@@ -1,32 +1,42 @@
 import re
-import json
 
-content = {
-    'csrfmiddlewaretoken': ['driieKXoVAH54qA5qcfyZXLXCCXaxrOgXTtuQuinTDxQw9lGmmm6BIgUe5txvfUB'], 'questions': ['', ''], 
-    'question3': ['who was the earthly father of Jesus'], 
-    'choice3': ['True'], 
-    'question1': ['how old was Jesus when he began his earthly ministry?'], 'choice1': ['False']}
+# regex below matches 1 to infinix *(1000) digit at the end of a string
+id = re.compile(r'[0-9]{1,}$')
+text = 'hello how are you doing 45, and2 mummy 13'
+res =id.findall(text) #returns a list
 
-content2 = {
-    'csrfmiddlewaretoken': ['x4EjMXi6ARVlGvKqyw303MnjszGRsHnzhwPvoHD5yUL68ev1uGayFxSg42ceqvtU'],
-    'question3': ['who was the earthly father of Jesus'], 
-    'choice3': ['False,8'], 
-    'question2': ['how old was Jesus when He died'], 
-    'choice2': ['True,5']}
+# print(id.search(text).group())
+# print(res)
 
+
+def match_question_with_choice(querydict):
+    print(querydict)
+    question_answer_pair ={} #diction of quest_id:choice_id pair
+    found_key=''
+    found_choice=' '
+    for key,value in querydict.items():
+        if re.search(r'^question',key):
+            # print(f'questions are {key + ":" + value[0] }')
+            found_key = value[0]
+        if re.search(r'^choice',key):
+            # print(f'choices are: {key + ":" + value[0] }')
+            found_choice = value[0]
+        try :
+            id.search(found_key).group() == id.search(found_choice).group()
+            question_answer_pair[found_key] = found_choice
+            # print(f'found key:{querydict(found_key)}')
+        except:
+            print('no match found')
+    return question_answer_pair
+
+# testing
 content3 ={
-    'csrfmiddlewaretoken': ['Gf4i5oOok2bOgX3OIfhtGy4Yxp1J8WGDqHfuH89ni51zIGOpEpo1ijzV9Sx66KMY'], 'question3': ['3'], 
-    'choice3': ['8'], 
-    'question2': ['2'], 
-    'choice2': ['5']}
+    'csrfmiddlewaretoken': ['JsL0S1OoeGKJlomeW27jg4orwLM0v57etUWcuL9ncJAuN77PSceRSPTo8eintTdz'], 'question2': ['2'], 
+    'choice2': ['4'], 
+    'question1': ['1'], 
+    'choice1': ['2'], 
+    'question3': ['3'], 
+    'choice3': ['9']
+    }
 
-question_answer_pair ={}
-for key,value in content3.items():
-    if re.search(r'^question',key):
-        print(f'questions are {key + ":" + value[0] }')
-
-# json formatting
-# json_data = json.dumps(content2, indent=2)
-# print (json_data)
-# q =json_data["question3"]
-# print(f'question3 is: {type(json_data)}')
+print(f'testing {match_question_with_choice(content3)}')
