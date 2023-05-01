@@ -5,4 +5,16 @@
     <h1>Profile page</h1>
     Hello {{user}}
 </div>
+<div class="container">
+    <form action="{url 'auth1:profile'}" method="post">
+        {% csrf_token %}
+        {% for message in messages %}
+            {{message}}
+        {% endfor %}
+        {% for field in form %}
+            {{ field }}
+        {% endfor %}
+        <input type="submit" value="Update Profile">
+    </form>
+</div>
 {% endblock%}

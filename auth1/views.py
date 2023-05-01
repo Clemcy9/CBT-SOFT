@@ -3,14 +3,12 @@ from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import User
-from .forms import RegisterForm, LoginForm
+from .models import User, Profile
+from .forms import RegisterForm, LoginForm, ProfileForm
 #i love you == i gave him my words and though he disbelieves me, i not back on my words
 
 # Create your views here.
 
-# def home(request):
-#     return render(request, 'home.html',{'user':None})
 
 def login_view(request):
     # print(request.user.is_authenticated)
@@ -89,10 +87,24 @@ def register(request):
     else:
         return redirect(reverse('auth1:profile',args=(request.user,)),permanent=True)
             
-@login_required(login_url='/auth/login/')
-def profile(request,user):
-    id = User.objects.get(email = user)
-    print(f'found user is {id}')
 
-    return render(request, 'profile.html',{'user':id or 'no user'})
+@login_required(login_url='/auth/login/')
+def profile(request,id):
+    if request.method =='POST':
+        pass
+    
+    # if no profile, create one
+    try:
+        profile = Profile.objects.get(user__id = id)
+    except:
+        profile = Profile(user=request.user)
+    print(f'this is profile {profile}')
+    form = ProfileForm(data=profile.myManager.profile_dict())
+    context = {
+        'profile':profile,
+        'form':form,
+        'user':request.user
+    }
+    return render(request, 'profile.html',context)
+
 

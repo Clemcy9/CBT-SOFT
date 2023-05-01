@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserGuess, Choice, Profile
+from .models import UserGuess, Choice
 
 
 # class RegisterForm(forms.ModelForm):
@@ -30,7 +30,3 @@ class QuizForm(forms.Form):
     #     super().__init__(*args, **kwargs)
     #     self.fields['option'].queryset = Choice.objects.filter(question = )
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = '__all__'

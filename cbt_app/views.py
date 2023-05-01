@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.forms import formset_factory
 from django.core import serializers
 from useful_functions.quiz_result import question_choice_pair, mark_quiz, score
-from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz, Profile
+from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz
 from .forms import QuizForm
 
 # Create your views here.
@@ -13,13 +13,6 @@ from .forms import QuizForm
 def index(request):
     return render(request, 'index.html')
 
-@login_required
-def profile(request):
-    profile = Profile.objects.get(id = request.user.id)
-    context = {
-        'profile':profile,
-    }
-    return render(request, 'profile.html',context)
 
 @login_required
 def dashboard(request):

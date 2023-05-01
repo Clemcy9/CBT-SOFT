@@ -1,6 +1,5 @@
 from django import forms
-from .models import User
-
+from .models import User, Profile
 
 class RegisterForm(forms.ModelForm):
     
@@ -18,3 +17,8 @@ class LoginForm(forms.Form):
     
     email = forms.EmailField(required=True,initial='@gmail.com')
     password = forms.CharField(widget=forms.PasswordInput)
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = '__all__'

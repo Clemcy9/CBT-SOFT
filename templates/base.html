@@ -30,7 +30,7 @@
         <li><a href="{% url 'cbt_app:index' %}">Home</a></li>
         {% if user.is_authenticated %}
 
-        <li><a href="{% url 'auth1:profile' user %}">My profile</a></li>
+        <li><a href="{% url 'auth1:profile' user.id %}">My profile</a></li>
         <li><a href="{% url 'cbt_app:dashboard' %}">My Dashboard</a></li>
        
         <li><a href="{% url 'auth1:logout' %}">Sign Out</a></li>

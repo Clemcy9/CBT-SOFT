@@ -19,16 +19,7 @@ class Courses(models.Model):
         return self.level.name +' '+ self.name
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    phone_number = models.CharField(blank=True, max_length=16)
-    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
-    courses = models.ManyToManyField(Courses)
-    current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
 
-    def __str__(self) -> str:
-        return self.user
-    
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
     ('random', ('Random')),
@@ -60,10 +51,6 @@ class Choice(models.Model):
         return self.content
 
 # model to store user choice for mcq
-class UserGuess(models.Model):
-    question = models.ForeignKey(Question,null=True, on_delete=models.CASCADE)
-    # guess = models.ForeignKey(Choice,on_delete=models.DO_NOTHING, null=True, )
-    guess = models.CharField(max_length=200)
 
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
@@ -96,11 +83,16 @@ class Quiz(models.Model):
         super().save(*args, **kwargs)
 
     """
+class UserGuess(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+    quiz = models.ForeignKey(Quiz,null=True, on_delete=models.DO_NOTHING)
+    # guess = models.ForeignKey(Choice,on_delete=models.DO_NOTHING, null=True, )
+    guess = models.JSONField()
 
 class Result(models.Model):
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-
-    score = models.IntegerField()
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+    quiz = models.ForeignKey(Quiz,null=True, on_delete=models.DO_NOTHING)
+    score = models.CharField(max_length=10)
 
     def __str__(self) -> str:
         return self.student.first_name

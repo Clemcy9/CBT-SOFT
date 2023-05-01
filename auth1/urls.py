@@ -8,6 +8,6 @@ urlpatterns = [
     path('reg/',vi.register,name='reg'),
     path('login/',vi.login_view,name='login'),
     path('logout/',vi.logout_view,name='logout'),
-    path('profile/<str:user>/',vi.profile,name='profile'),
+    path('profile/<int:id>/',vi.profile,name='profile'),
     # path('accounts/', include('django.contrib.auth.urls'))
 ]
