@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import validate_comma_separated_integer_list, MaxValueValidator
 
 # Create your models here.
 class Discipline(models.Model):
@@ -89,6 +90,36 @@ class Quiz(models.Model):
         super().save(*args, **kwargs)
 
     """
+
+# model to store User sitting (exams attempt)
+class Sitting(models.Model):
+    """
+    used to store the progress of users taking a quiz.
+    
+    Questions_all = scheduled questions for a particular sitting
+    Questions_unattempted = questions left to be answered
+    Questions_attempted = questions answered
+    Questions_failed = questions with wrong user choice
+    Questions_passed = questions with correct user choice
+    Question_Choice_pair = just as the name suggest; json
+
+    Questions_unattempted = Questions_all - Questions_attempted
+    """
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    quiz = models.ForeignKey(Quiz,on_delete=models.DO_NOTHING)
+    question_all = models.CharField(max_length=1024, verbose_name='All Questions', validators=[validate_comma_separated_integer_list])
+    question_unattempted = models.CharField(max_length=1024, verbose_name='Unanswered Questions', validators=[validate_comma_separated_integer_list])
+    question_failed = models.CharField(max_length=1024, verbose_name='Failed Questions', validators=[validate_comma_separated_integer_list])
+    question_passed = models.CharField(max_length=1024, verbose_name='Passed Questions', validators=[validate_comma_separated_integer_list])
+    question_choice_pair = models.JSONField(blank=True, default='{}', help_text='json format question choice pair')
+    is_attempted = models.BooleanField('if any attempt', default=False)
+    current_score = models.IntegerField()
+    start_time =models.DateTimeField(auto_now_add=True)
+
+
+
+
 class UserGuess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
     quiz = models.ForeignKey(Quiz,null=True, on_delete=models.DO_NOTHING)
