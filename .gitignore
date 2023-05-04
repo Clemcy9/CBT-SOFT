@@ -1,2 +1,7 @@
 # python cache files
 *.pyc
+
+auth1/__pycache__/views.cpython-311.pyc
+
+auth1/__pycache__/models.cpython-311.pyc
+auth1/__pycache__/views.cpython-311.pyc

@@ -18,16 +18,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
-class ProfileManager(models.Manager):
-
-    def profile_dict(self):
-        return {
-            'user':self.user,
-            'phone_number':self.phone_number,
-            'discipline':self.discipline,
-            'courses':self.courses,
-            'current_level':self.current_level
-        }
 
 class Profile(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
@@ -36,12 +26,15 @@ class Profile(models.Model):
     courses = models.ManyToManyField(Courses)
     current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
 
-    # managers
-    objects = models.Manager()
-    myManager = ProfileManager()
-
     def __str__(self):
-        return self.user.get_email_field_name()
+        return self.user.get_email_field_name
     
+    def to_dict(self):
+        return {
+            'user':self.user,
+            'phone_number':self.phone_number,
+            'discipline':self.discipline,
+            'courses':self.courses,
+            'current_level':self.current_level
+        }
     
-

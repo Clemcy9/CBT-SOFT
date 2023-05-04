@@ -95,11 +95,11 @@ def profile(request,id):
     
     # if no profile, create one
     try:
-        profile = Profile.objects.get(user__id = id)
+        profile = Profile.objects.get(user__id = id).to_dict()
     except:
         profile = Profile(user=request.user)
     print(f'this is profile {profile}')
-    form = ProfileForm(data=profile.myManager.profile_dict())
+    form = ProfileForm(data=profile)
     context = {
         'profile':profile,
         'form':form,

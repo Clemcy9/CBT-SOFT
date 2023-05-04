@@ -26,6 +26,7 @@ ANSWER_ORDER_OPTIONS = (
     ('none', ('None'))
 )
 
+# model to store user choice for mcq
 class Question(models.Model):
     content = models.TextField(blank=False)
     answer_order = models.CharField(max_length=30, null=True, blank=True, choices=ANSWER_ORDER_OPTIONS, help_text=("The order in which multichoice answer options are displayed to the user"))
@@ -50,15 +51,20 @@ class Choice(models.Model):
     def __str__(self) -> str:
         return self.content
 
-# model to store user choice for mcq
 
+
+# model to store respective quiz(exams)
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
     examiner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     questions = models.ManyToManyField(Question)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE,null=True)
+
+    # features of quiz
     single_attempt = models.BooleanField(blank=False, default=True)
+    random_order = models.BooleanField(blank=False, default=True, help_text='orders with which questions will appear')
+    max_questions = models.PositiveIntegerField(help_text='Display the questions in a random order or as they are set?')
     duration = models.IntegerField(help_text='duration in minutes')
     start_time =models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField()
