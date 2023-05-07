@@ -91,6 +91,50 @@ class Quiz(models.Model):
 
     """
 
+
+class SittingManager(models.Manager):
+    def new_sitting(self, user, quiz):
+        if quiz.random_order:
+            question_set = quiz.questions.all().order_by('?')
+        else:
+            question_set = quiz.questions.all()
+        
+        # store the question id in a list
+        question_set = [quest.id for quest in question_set]
+        # check if max number of question, return list of that size if yes
+        # question_set = question_set[:len(question_set) and len(question_set)>quiz.max_questions]
+        question_set = question_set[:quiz.max_questions]
+                                    
+        # convert the question list to a string separated by a comma
+        question_set = ','.join(map(str,question_set))
+
+        sitting = self.create(
+            user=user,quiz=quiz,
+            question_all=question_set,
+            question_unattempted=question_set,
+            question_failed ='',
+            question_passed='',
+            question_choice_pair ='{}',
+            is_completed = False,
+            current_score = 0
+            )
+        return sitting
+
+    def check_sitting(self,user,quiz):
+        # check if already attempted the quiz for single_attempt quiz
+        if quiz.single_attempt and self.filter(user=user,quiz=quiz,is_completed=True):
+            return False
+        
+        # check for uncompleted quiz instance to resume, else create new one
+        try:
+            sitting = self.get(user=user, quiz=quiz, is_completed =False)
+        except Sitting.DoesNotExist:
+            sitting = self.new_sitting(user,quiz)
+        except Sitting.MultipleObjectsReturned:
+            sitting = self.filter(user=user, quiz=quiz, is_completed = False)[0]
+
+        return sitting
+
 # model to store User sitting (exams attempt)
 class Sitting(models.Model):
     """
@@ -112,11 +156,46 @@ class Sitting(models.Model):
     question_unattempted = models.CharField(max_length=1024, verbose_name='Unanswered Questions', validators=[validate_comma_separated_integer_list])
     question_failed = models.CharField(max_length=1024, verbose_name='Failed Questions', validators=[validate_comma_separated_integer_list])
     question_passed = models.CharField(max_length=1024, verbose_name='Passed Questions', validators=[validate_comma_separated_integer_list])
-    question_choice_pair = models.JSONField(blank=True, default='{}', help_text='json format question choice pair')
-    is_attempted = models.BooleanField('if any attempt', default=False)
+    question_choice_pair = models.JSONField(blank=True, default=dict, help_text='json format question choice pair')
+    is_completed = models.BooleanField('Is completed', default=False)
     current_score = models.IntegerField()
     start_time =models.DateTimeField(auto_now_add=True)
 
+    objects = models.Manager()
+    sits = SittingManager()
+
+    # first_10 =[]
+    def get_questions_in_10s(self):
+        '''
+        returns a list of atmost 10 question from question_all list
+        '''
+        if self.question_unattempted:
+            # question_id in int list
+            # convert id of strings to list of int(id)
+            all_quest = list(map(int,self.question_unattempted.split(',')))
+            self.first_10 = all_quest[:10]
+            
+            # # remove first_10 from question_all list(remaining quest)
+            # minus_first_10_int = [x for x in all_quest if x not in self.first_10 ]
+            # # update unattempted questions, converted to str
+            # self.question_unattempted = ','.join(map(str,minus_first_10_int))
+            
+            return Question.objects.filter(id__in= self.first_10)
+    
+    def remove_question_in_10s(self):
+        '''
+        remove 1 to 10 questions from the sitting (question all) list 
+        '''
+
+        if self.question_all:
+            all_quest = list(map(int,self.question_unattempted.split(',')))
+            # remove first_10 from question_all list(remaining quest)
+            # minus_first_10_int = [x for x in all_quest if x not in self.first_10 ]
+            minus_first_10_int = all_quest[10: ]
+            # update unattempted questions, converted to str
+            self.question_unattempted = ','.join(map(str,minus_first_10_int))
+            self.save()
+            
 
 
 

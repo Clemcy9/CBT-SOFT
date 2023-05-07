@@ -5,8 +5,8 @@ from django.core.paginator import Paginator
 from django.forms import formset_factory
 from django.core import serializers
 from useful_functions.quiz_result import question_choice_pair, mark_quiz, score
-from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz
-from .forms import QuizForm
+from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz,Sitting
+from .forms import QuizForm,QuestionForm
 
 # Create your views here.
 
@@ -24,20 +24,36 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context)
 
+# @login_required
+# def take_quiz(request,quiz_id):
+#     quiz = Quiz.objects.get(id=quiz_id)
+#     contents = Question.objects.filter(quiz__id = quiz_id).order_by('?')[0:3]
+#     paginator = Paginator(contents, 6)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     context = {
+#         'contents':contents,
+#         'page_obj':page_obj
+#     }
+#     return render(request, 'quiz.html', context)
+
 @login_required
 def take_quiz(request,quiz_id):
     quiz = Quiz.objects.get(id=quiz_id)
-    contents = Question.objects.filter(quiz__id = quiz_id).order_by('?')[0:3]
-    paginator = Paginator(contents, 6)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {
-        'contents':contents,
-        'page_obj':page_obj
-    }
-    return render(request, 'quiz.html', context)
-
-
+    sitting = Sitting.sits.check_sitting(request.user,quiz)
+    if sitting:
+        questions = sitting.get_questions_in_10s()
+        form = QuestionForm(questions[1])
+        
+        # form.data = questions[0]
+        context={
+            'forms':form
+        }
+        print(f'this is form {questions}')
+        return render(request, 'quiz.html',context)
+    else:
+        return HttpResponse("You've already taken test")
+    
 
 def quiz_progress(request):
     if request.method == 'POST':
