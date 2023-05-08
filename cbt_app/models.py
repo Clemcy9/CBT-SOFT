@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.utils.timezone import now
 from django.core.validators import validate_comma_separated_integer_list, MaxValueValidator
+import json
 
 # Create your models here.
 class Discipline(models.Model):
@@ -153,6 +155,7 @@ class Sitting(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     quiz = models.ForeignKey(Quiz,on_delete=models.DO_NOTHING)
     question_all = models.CharField(max_length=1024, verbose_name='All Questions', validators=[validate_comma_separated_integer_list])
+    question_attempted = models.CharField(max_length=1024, verbose_name='Answered Questions', validators=[validate_comma_separated_integer_list])
     question_unattempted = models.CharField(max_length=1024, verbose_name='Unanswered Questions', validators=[validate_comma_separated_integer_list])
     question_failed = models.CharField(max_length=1024, verbose_name='Failed Questions', validators=[validate_comma_separated_integer_list])
     question_passed = models.CharField(max_length=1024, verbose_name='Passed Questions', validators=[validate_comma_separated_integer_list])
@@ -160,7 +163,7 @@ class Sitting(models.Model):
     is_completed = models.BooleanField('Is completed', default=False)
     current_score = models.IntegerField()
     start_time =models.DateTimeField(auto_now_add=True)
-
+    end_time =models.DateTimeField(null=True, blank=True)
     objects = models.Manager()
     sits = SittingManager()
 
@@ -173,7 +176,7 @@ class Sitting(models.Model):
             # question_id in int list
             # convert id of strings to list of int(id)
             all_quest = list(map(int,self.question_unattempted.split(',')))
-            self.first_10 = all_quest[:10]
+            self.first_10 = all_quest[:2]
             
             # # remove first_10 from question_all list(remaining quest)
             # minus_first_10_int = [x for x in all_quest if x not in self.first_10 ]
@@ -191,10 +194,38 @@ class Sitting(models.Model):
             all_quest = list(map(int,self.question_unattempted.split(',')))
             # remove first_10 from question_all list(remaining quest)
             # minus_first_10_int = [x for x in all_quest if x not in self.first_10 ]
-            minus_first_10_int = all_quest[10: ]
+            minus_first_10_int = all_quest[2: ]
             # update unattempted questions, converted to str
             self.question_unattempted = ','.join(map(str,minus_first_10_int))
             self.save()
+    
+    def sitting_complete(self):
+        self.is_completed=True
+        self.end = now()
+        self.save()
+    
+    def add_attempted_question(self,quest,quest_choice):
+        # get previous attempt_question, extend it with new quest
+        previous_attempt =self.question_attempted.split(',')
+        if previous_attempt and previous_attempt != ['']:
+            print(f'old values are {previous_attempt}')
+            self.quest = list(map(int,self.question_attempted.split(',')))
+            self.quest.extend(quest)
+            question_set = ','.join(map(str,self.quest))
+        else:
+            question_set = ','.join(map(str,quest))
+        self.question_attempted = question_set
+
+        self.quest_pair = json.loads(self.question_choice_pair)
+        print(f'this is json load {self.quest_pair}')
+        for k,v in quest_choice.items():
+            self.quest_pair[k] = v
+        self.question_choice_pair = json.dumps(self.quest_pair)
+        print(f'this is json dump {self.question_choice_pair}')
+        self.save()
+
+    # def add_quest_choice_pair(self):
+
             
 
 

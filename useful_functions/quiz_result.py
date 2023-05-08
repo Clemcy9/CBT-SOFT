@@ -32,7 +32,7 @@ def question_choice_pair(querydict):
                 choice_id = id.search(found_choice).group()
                 print(f'choice_id = {choice_id}')
                 if quest_id == choice_id:
-                    question_answer_pair[found_key] = querydict[found_choice][0]
+                    question_answer_pair[found_key] = int(querydict[found_choice][0])
             except:
                 print('no choice only question found')
                 # if only question without choice, give null
