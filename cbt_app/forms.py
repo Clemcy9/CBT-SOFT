@@ -1,5 +1,6 @@
 from django import forms
 from .models import UserGuess, Choice
+from django.forms.widgets import RadioSelect
 
 
 # class RegisterForm(forms.ModelForm):
@@ -30,3 +31,12 @@ class QuizForm(forms.Form):
     #     super().__init__(*args, **kwargs)
     #     self.fields['option'].queryset = Choice.objects.filter(question = )
 
+
+# not working
+class QuestionForm(forms.Form):
+    def __init__(self, question, *args,**kwargs) -> None:
+        super().__init__( question, *args,**kwargs)
+        choice_list =[x for x in question[0].choice_set.all()]
+        self.fields['question'] = forms.CharField(max_length=300)
+        self.fields['choice'] = forms.ChoiceField(choices=choice_list,widget=RadioSelect)
+        
