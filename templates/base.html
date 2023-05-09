@@ -40,8 +40,10 @@
         <li><a href="{% url 'auth1:login' %}">Sign In</a></li>
         {% endif %}
     </ul>
-    {% endif %}
-    {% block content %}
-    {% endblock %}
+    <div style="display: flex; justify-content: center; width: 100%;">
+      {% endif %}
+      {% block content %}
+      {% endblock %}
+    </div>
 </body>
 </html>

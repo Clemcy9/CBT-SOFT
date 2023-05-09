@@ -20,14 +20,14 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(blank=True, max_length=16)
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
     courses = models.ManyToManyField(Courses)
     current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.user.get_email_field_name
+        return str(self.user)
     
     def to_dict(self):
         return {

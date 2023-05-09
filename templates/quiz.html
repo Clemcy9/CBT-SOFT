@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>Time Left: <strong id="time-left"></strong>secs</h1>
+    <h3 style="text-align: end;">Time Left: <strong id="time-left-min"></strong>:<strong id="time-left-secs"></strong>secs</h3>
     
     
     <form action="{% url 'cbt_app:quiz_progress' %}" method="post">
@@ -29,9 +29,12 @@
 <script>
     
 // timer countdown
-const timeLeftDisplay = document.querySelector('#time-left');
+        const timeLeftmin = document.querySelector('#time-left-min');
+        const timeLeftsec = document.querySelector('#time-left-secs');
         const submit = document.querySelector('#submit');
         let timeLeft = {{duration}} *60 ;
+        let min = 0;
+        let secs = 0;
 
         function countDown() {
             setInterval(function () {
@@ -42,8 +45,11 @@ const timeLeftDisplay = document.querySelector('#time-left');
                     // submit.attr("disabled", true);
                     submit.click()
                 }
-                timeLeftDisplay.innerHTML = timeLeft
                 timeLeft--;
+                min = Math.floor(timeLeft/60)
+                secs= Math.round(((timeLeft/60)-min)*60)
+                timeLeftmin.innerHTML = min
+                timeLeftsec.innerHTML = secs
             }, 1000)
         }
 document.addEventListener(onload,countDown())

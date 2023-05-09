@@ -21,4 +21,5 @@ class LoginForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['phone_number','discipline','current_level','courses']

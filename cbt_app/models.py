@@ -7,7 +7,8 @@ import json
 # Create your models here.
 class Discipline(models.Model):
     name = models.CharField(max_length=50,blank=False, unique=True)
-
+    def __str__(self):
+        return self.name
 class Level(models.Model):
     name = models.CharField(max_length=50,blank=False, unique=True)
 
@@ -161,7 +162,7 @@ class Sitting(models.Model):
     question_passed = models.CharField(max_length=1024, verbose_name='Passed Questions', validators=[validate_comma_separated_integer_list])
     question_choice_pair = models.JSONField(blank=True, default=dict, help_text='json format question choice pair')
     is_completed = models.BooleanField('Is completed', default=False)
-    current_score = models.IntegerField()
+    current_score = models.IntegerField(default=0)
     start_time =models.DateTimeField(auto_now_add=True)
     end_time =models.DateTimeField(null=True, blank=True)
     objects = models.Manager()
@@ -204,7 +205,8 @@ class Sitting(models.Model):
         self.end = now()
         self.save()
     
-    def add_attempted_question(self,quest,quest_choice):
+    def record_attempt(self,quest,quest_choice):
+        # attempted question list
         # get previous attempt_question, extend it with new quest
         previous_attempt =self.question_attempted.split(',')
         if previous_attempt and previous_attempt != ['']:
@@ -216,15 +218,27 @@ class Sitting(models.Model):
             question_set = ','.join(map(str,quest))
         self.question_attempted = question_set
 
+        # question_choice pair
         self.quest_pair = json.loads(self.question_choice_pair)
         print(f'this is json load {self.quest_pair}')
         for k,v in quest_choice.items():
             self.quest_pair[k] = v
         self.question_choice_pair = json.dumps(self.quest_pair)
         print(f'this is json dump {self.question_choice_pair}')
+
+        # score
+        c=Choice.objects.filter(id__in=self.quest_pair.values())
+        # sum all choice with is_answer == true, store result in dict correct
+        correct= c.aggregate(count = models.Sum('is_answer'))
+        self.current_score = correct['count']
         self.save()
 
-    # def add_quest_choice_pair(self):
+    def get_score(self):
+        all_quest = list(map(int,self.question_all.split(',')))
+        total_quest = len(all_quest)
+        total_points = self.current_score
+        percent_score = (total_points/total_quest)*100
+        return percent_score
 
             
 

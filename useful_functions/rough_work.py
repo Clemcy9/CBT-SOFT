@@ -55,3 +55,27 @@ from django.contrib.auth import get_user_model,get_user
         <p>hello</p>
     {% endfor %} -->
 """
+
+# views.py
+"""
+# @login_required
+# def take_quiz(request,quiz_id):
+#     quiz = Quiz.objects.get(id=quiz_id)
+#     questions = Question.objects.filter(quiz__id = quiz_id).order_by('?')[0:3]
+#     paginator = Paginator(questions, 6)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     context = {
+#         'questions':questions,
+#         'page_obj':page_obj
+#     }
+#     return render(request, 'quiz.html', context)
+
+"""
+
+# javascript request (get) data async: frontend
+"""
+x = await fetch('http://127.0.0.1:8000/quiz/api/')
+y = await x.json()
+console.log(y)
+"""

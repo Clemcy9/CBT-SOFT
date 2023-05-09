@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect,HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.forms import formset_factory
@@ -25,19 +25,6 @@ def dashboard(request):
     }
 
     return render(request, 'dashboard.html', context)
-
-# @login_required
-# def take_quiz(request,quiz_id):
-#     quiz = Quiz.objects.get(id=quiz_id)
-#     questions = Question.objects.filter(quiz__id = quiz_id).order_by('?')[0:3]
-#     paginator = Paginator(questions, 6)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     context = {
-#         'questions':questions,
-#         'page_obj':page_obj
-#     }
-#     return render(request, 'quiz.html', context)
 
 @login_required
 def take_quiz(request,quiz_id):
@@ -70,13 +57,13 @@ def quiz_progress(request):
             print(f'type of quest pair is: {type(question_pair)}')
             result_list =mark_quiz(question_pair,Choice)
             print(f'result is :{result_list}')
-            result_percentage = score(result_list,question_list)
-            sitting.add_attempted_question(question_list, question_pair)
+            # result_percentage = score(result_list,question_list)
+            sitting.record_attempt(question_list, question_pair)
             sitting.remove_question_in_10s()
             # check if completed quiz
             if not sitting.question_unattempted:
                 sitting.sitting_complete()
-                messages.info(request, f'Quiz completed, </br> your result is {result_percentage}')
+                messages.info(request, f'Quiz completed, your result is {sitting.get_score()}')
                 return HttpResponseRedirect(reverse('cbt_app:dashboard'))
             else:
                 return(redirect(reverse('cbt_app:take_quiz',args=[sitting.quiz.id])))
@@ -86,3 +73,11 @@ def quiz_progress(request):
 
         # return HttpResponse(f'post received successfully, </br> your result is {result_percentage}')
     
+
+def api_all_question(self):
+    question = Question.objects.all().order_by('?')
+    choice = Choice.objects.all()
+    c =[question,choice]
+    json_data = serializers.serialize('json',choice)
+    # return JsonResponse(json_data,safe=False)
+    return HttpResponse(json_data)
