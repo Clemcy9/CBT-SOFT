@@ -74,10 +74,15 @@ def quiz_progress(request):
         # return HttpResponse(f'post received successfully, </br> your result is {result_percentage}')
     
 
-def api_all_question(self):
+def api_all_question(request):
+    if request.method == 'POST':
+        json_data = request.POST
+        print(f'type of jdata:{type(json_data)}\njdata:{json_data}')
+        # data = serializers.deserialize()
+        return JsonResponse('data received')
+
     question = Question.objects.all().order_by('?')
     choice = Choice.objects.all()
-    c =[question,choice]
     json_data = serializers.serialize('json',choice)
     # return JsonResponse(json_data,safe=False)
     return HttpResponse(json_data)

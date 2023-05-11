@@ -96,6 +96,7 @@ def profile(request,id):
         profile.save()
     if request.method =='POST':
         form = ProfileForm(request.POST)
+        print(f'data:{request.POST}')
         if form.is_valid():
             print(f"post data: {form.cleaned_data['courses']}")
             profile.phone_number = form.cleaned_data['phone_number']
