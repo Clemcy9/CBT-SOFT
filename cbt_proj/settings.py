@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cbt_app',
     'auth1',
-    'fileuploads_bg_processing_app',
+    'file_processing',
 ]
 
 MIDDLEWARE = [

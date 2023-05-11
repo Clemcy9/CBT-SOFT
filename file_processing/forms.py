@@ -4,4 +4,5 @@ from .models import QuestionUploads, CourseTemplate
 class QuestionUploadForm(forms.ModelForm):
     class Meta:
         model =QuestionUploads
-        fields = ['course','title','file']
+        # fields = ['course','title','file']
+        fields = '__all__'

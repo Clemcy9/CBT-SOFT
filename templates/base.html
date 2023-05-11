@@ -35,6 +35,9 @@
         <li><a href="{% url 'cbt_app:dashboard' %}">My Dashboard</a></li>
        
         <li><a href="{% url 'auth1:logout' %}">Sign Out</a></li>
+          {% if not user.is_student %}
+          <li><a href="{% url 'file_processing:question_upload' %}">Question Upload</a></li>
+          {% endif %}
         {% else %}
         <li><a href="{% url 'auth1:reg' %}">Sign Up</a></li>
         <li><a href="{% url 'auth1:login' %}">Sign In</a></li>

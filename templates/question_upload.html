@@ -5,16 +5,17 @@
         <h2>
             Question Upload(#edited course template)
         </h2>
-        <form action="" method="post">
+        <form method="post" action="{% url 'file_processing:question_upload' %}">
+            <!-- <input type="text" hidden name="user" value="{{user}}"> -->
             <table style="width: 100%; border-spacing: 3px;">
                 {% csrf_token %}
-                {% for form in forms %}
+                {% for field in form %}
                     <tr>
-                        <td style="padding: .3em;">{{form.label_tag}} </td>
-                        <td>{{form}}</td>
+                        <td style="padding: .3em;">{{field.label_tag}} </td>
+                        <td>{{field}}</td>
                     </tr>
                     <tr>
-                        {% for error in form.errors %}
+                        {% for error in field.errors %}
                         {{error}}
                         <hr style="background-color: red; height: 1px;">
                         {% endfor %}
@@ -30,7 +31,7 @@
                     
                 </table>
             
-            <input type="submit" value="Register" style="background-color: #4CAF50; /* Green */
+            <input type="submit" value="Upload" style="background-color: #4CAF50; /* Green */
             border: none; color: white; padding: 12px 22px; text-align: center; text-decoration: none; display: inline-block;
             ; cursor: pointer;">
         </form>

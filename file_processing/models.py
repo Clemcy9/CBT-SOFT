@@ -5,7 +5,7 @@ from cbt_app.models import Courses, Level
 # Create your models here.
 
 class QuestionUploads(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, blank=True)
     course = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True)
     title = models.CharField(max_length=100)
     file = models.FileField('Excel file',upload_to='./static/uploads')
@@ -13,7 +13,7 @@ class QuestionUploads(models.Model):
 
 
     def __str__(self) -> str:
-        return self.course + self.title
+        return str(self.course) + self.title
 
 class CourseTemplate(models.Model):
     course = models.OneToOneField(Courses, on_delete=models.DO_NOTHING)
