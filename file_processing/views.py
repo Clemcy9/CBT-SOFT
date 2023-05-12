@@ -7,14 +7,15 @@ from .forms import QuestionUploadForm, CourseTemplate
 
 def question_upload(request):
     if request.method == 'POST':
-        form = QuestionUploadForm(request.POST)
+        form = QuestionUploadForm(request.POST, request.FILES)
         if form.is_valid():
+            print(f'no error: {form.errors}')
+            form.save(commit=False)
+            form.user = request.user
             form.save()
-            print(f'errors: {form.errors}')
             return HttpResponse('successfully Uploaded')
         else:
             print(f'error:{request.POST}')
-            print(f'errors2: {form.errors}')
             messages.error(request,'something went wrong')
             form = QuestionUploadForm(request.POST)
             return render(request, 'question_upload.html',{'form':form})
