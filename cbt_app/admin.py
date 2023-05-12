@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Discipline,Level,Courses,Question,Quiz,Result,Choice
+from .models import Discipline,Level,Courses,Question,Quiz,Result,Choice,Sitting
 
 # Register your models here.
 
@@ -12,5 +12,5 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [QuestionInline]
 
 # admin.site.register(User, UserAdmin)
-admin.site.register([Discipline,Level,Courses,Quiz,Result,Choice])
+admin.site.register([Discipline,Level,Courses,Quiz,Result,Choice,Sitting])
 admin.site.register(Question,QuestionAdmin)

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cbt_app',
     'auth1',
+    'file_processing',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'auth1.User'
+LOGIN_URL = '/auth/login/'

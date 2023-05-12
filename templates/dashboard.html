@@ -6,6 +6,11 @@
         <h1>
             User Dashboard
         </h1>
+        <h2>
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        </h2>
         <table style="width: 100%;">
             <tr>
                 <thead>Available Exams</thead>
@@ -28,4 +33,5 @@
         </table>
     </div>
 </div>
+
 {% endblock %}

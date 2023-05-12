@@ -15,10 +15,11 @@ forms.PasswordInput
 
 class LoginForm(forms.Form):
     
-    email = forms.EmailField(required=True,initial='@gmail.com')
+    email = forms.EmailField(required=True,initial='-adsc@gmail.com')
     password = forms.CharField(widget=forms.PasswordInput)
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['phone_number','discipline','current_level','courses']

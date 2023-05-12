@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('quiz/', include('cbt_app.urls')),
     path('auth/',include('auth1.urls')),
+    path('files/',include('file_processing.urls')),
     path('', view=RedirectView.as_view(url='quiz/'))
     
 ]
