@@ -25,6 +25,7 @@ class Profile(models.Model):
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
     courses = models.ManyToManyField(Courses)
     current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
+    profile_pics = models.ImageField('Profile Picture',upload_to='./static/profile')
 
     def __str__(self):
         return str(self.user)
