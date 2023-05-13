@@ -19,7 +19,11 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 class ProfileForm(forms.ModelForm):
+    # user = forms.ModelChoiceField(queryset=User.objects.all(), required=True,widget=forms.HiddenInput())
     class Meta:
         model = Profile
         # fields = '__all__'
-        fields = ['phone_number','discipline','current_level','courses','profile_pics']
+        fields = ['user','phone_number','discipline','current_level','courses','profile_pics']
+        widgets = {
+            'profile_pics':forms.FileInput(attrs={'required':False})
+        }
