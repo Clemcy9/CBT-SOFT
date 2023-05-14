@@ -1,4 +1,5 @@
 from django import forms
+# from ckeditor.widgets import CKEditorWidget
 from .models import User, Profile
 
 class RegisterForm(forms.ModelForm):
@@ -23,7 +24,8 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         # fields = '__all__'
-        fields = ['user','phone_number','discipline','current_level','courses','profile_pics']
+        fields = ['phone_number','discipline','current_level','courses','profile_pics','about_me']
         widgets = {
-            'profile_pics':forms.FileInput(attrs={'required':False})
+            'profile_pics':forms.FileInput(attrs={'required':False}),
+            # 'about_me': CKEditorWidget()
         }

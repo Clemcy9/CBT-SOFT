@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from ckeditor.fields import RichTextField
 from cbt_app.models import Discipline, Courses, Level
 # Create your models here.
 
@@ -26,7 +27,7 @@ class Profile(models.Model):
     courses = models.ManyToManyField(Courses)
     current_level = models.ForeignKey(Level, on_delete=models.CASCADE, null=True)
     profile_pics = models.ImageField('Profile Picture',upload_to='./static/profile', null=True)
-
+    about_me = RichTextField(blank=True,null=True)
     def __str__(self):
         return str(self.user)
     

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cbt_app',
     'auth1',
     'file_processing',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +102,24 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        # 'toolbar': [
+        #     [
+        #         'Undo', 'Redo',
+        #      '-', 'Bold', 'Italic', 'Underline',
+        #      '-', 'Link', 'Unlink', 'Anchor',
+        #      '-', 'Format',
+             
+        #      '-', 'Maximize',
+             
+        #     ],
+        # ],  
+        'width': 'auto',
+        'toolbarCanCollapse': True,
+    },
+}
 
 
 # Internationalization

@@ -23,7 +23,6 @@ class Courses(models.Model):
         return self.level.name +' '+ self.name
 
 
-
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
     ('random', ('Random')),
@@ -54,6 +53,12 @@ class Choice(models.Model):
 
     def __str__(self) -> str:
         return self.content
+
+class Topic(models.Model):
+    name = models.CharField(max_length=50,blank=False, unique=True)
+    
+    def __str__(self):
+        return self.name
 
 
 
