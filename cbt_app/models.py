@@ -22,6 +22,11 @@ class Courses(models.Model):
     def __str__(self):
         return self.level.name +' '+ self.name
 
+class Topic(models.Model):
+    name = models.CharField(max_length=50,blank=False, unique=True)
+    courses= models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
+    def __str__(self):
+        return self.name
 
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
@@ -32,6 +37,7 @@ ANSWER_ORDER_OPTIONS = (
 # model to store user choice for mcq
 class Question(models.Model):
     content = models.TextField(blank=False)
+    topic = models.ManyToManyField(Topic)
     answer_order = models.CharField(max_length=30, null=True, blank=True, choices=ANSWER_ORDER_OPTIONS, help_text=("The order in which multichoice answer options are displayed to the user"))
 
     def order_answers(self, queryset):
@@ -53,14 +59,6 @@ class Choice(models.Model):
 
     def __str__(self) -> str:
         return self.content
-
-class Topic(models.Model):
-    name = models.CharField(max_length=50,blank=False, unique=True)
-    
-    def __str__(self):
-        return self.name
-
-
 
 # model to store respective quiz(exams)
 class Quiz(models.Model):
