@@ -23,8 +23,11 @@ class Courses(models.Model):
         return self.level.name +' '+ self.name
 
 class Topic(models.Model):
-    name = models.CharField(max_length=50,blank=False, unique=True)
     courses= models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
+    name = models.CharField(max_length=50,blank=False)
+
+    class Meta:
+        unique_together=[['courses','name']]
     def __str__(self):
         return self.name
 
@@ -242,10 +245,6 @@ class Sitting(models.Model):
         total_points = self.current_score
         percent_score = (total_points/total_quest)*100
         return percent_score
-
-            
-
-
 
 class UserGuess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
