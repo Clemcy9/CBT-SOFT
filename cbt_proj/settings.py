@@ -105,17 +105,17 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CKEDITOR_CONFIGS = {
     'default': {
-        # 'toolbar': [
-        #     [
-        #         'Undo', 'Redo',
-        #      '-', 'Bold', 'Italic', 'Underline',
-        #      '-', 'Link', 'Unlink', 'Anchor',
-        #      '-', 'Format',
+        'toolbar': [
+            [
+                'Undo', 'Redo', 'Image',
+             '-', 'Bold', 'Italic', 'Underline',
+             '-', 'Link', 'Unlink', 'Anchor',
+             '-', 'Format',
              
-        #      '-', 'Maximize',
+             '-', 'Maximize',
              
-        #     ],
-        # ],  
+            ],
+        ],  
         'width': 'auto',
         'toolbarCanCollapse': True,
     },

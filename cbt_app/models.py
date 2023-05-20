@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Min, Max,Count
 from django.conf import settings
 from django.utils.timezone import now
 from django.core.validators import validate_comma_separated_integer_list, MaxValueValidator
@@ -174,6 +175,9 @@ class Sitting(models.Model):
     objects = models.Manager()
     sits = SittingManager()
 
+    def __str__(self):
+        return str(self.user) + ' result for '+str(self.quiz.title)
+
     # first_10 =[]
     def get_questions_in_10s(self):
         '''
@@ -208,7 +212,7 @@ class Sitting(models.Model):
     
     def sitting_complete(self):
         self.is_completed=True
-        self.end = now()
+        self.end_time = now()
         self.save()
     
     def record_attempt(self,quest,quest_choice):
@@ -237,6 +241,8 @@ class Sitting(models.Model):
         # sum all choice with is_answer == true, store result in dict correct
         correct= c.aggregate(count = models.Sum('is_answer'))
         self.current_score = correct['count']
+
+        self.end_time = now()
         self.save()
 
     def get_score(self):
@@ -244,7 +250,7 @@ class Sitting(models.Model):
         total_quest = len(all_quest)
         total_points = self.current_score
         percent_score = (total_points/total_quest)*100
-        return percent_score
+        return round(percent_score,2)
 
 class UserGuess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)

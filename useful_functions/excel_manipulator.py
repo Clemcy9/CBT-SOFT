@@ -3,22 +3,6 @@ from openpyxl.worksheet import worksheet as wss
 from threading import Thread
 from cbt_app.models import Question,Choice,Topic
 
-
- # using thread to achieve async file processing (saving excel to db)
-# t1 =Thread(target=xl2db,args=[str(form.instance.excel_file.name),])
-# t1.start()
-
-# wb = load_workbook(r'C:\Programming\Backend\CBT SOFT\static\uploads\Maths_ss1_template for cbt.xlsx')
-# ws = wb.active
-
-
-'''
-for x in ws['a3':'a8']:
-     print(x[0].value)   
-     if x[0].value ==None:
-             print('no more questions')
-             break
-'''
 def xl2db(url,course):
     wb = load_workbook(url)
     ws = wb.active
