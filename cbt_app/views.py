@@ -104,7 +104,7 @@ def api_all_question(request):
     return HttpResponse(json_data)
 
 @login_required
-def result_list(request):
+def result_list(request,quiz_id):
     user = request.user
     if not user.is_student:
         contents = Quiz.objects.filter(examiner=user)
@@ -112,7 +112,10 @@ def result_list(request):
         quiz_sit_pair ={
             x:x.get_score() for x in sitting 
         }
+        sits = Sitting.objects.filter(quiz__id =quiz_id)
         context = {
+            'quiz_attempt':sits.count(),
+            'quiz_total_question':len(sits[0].question_all.split(',')),
             'contents':contents,
             'sittings':sitting,
             'quiz_pair':quiz_sit_pair,

@@ -172,6 +172,7 @@ class Sitting(models.Model):
     current_score = models.IntegerField(default=0)
     start_time =models.DateTimeField(auto_now_add=True)
     end_time =models.DateTimeField(null=True, blank=True)
+    
     objects = models.Manager()
     sits = SittingManager()
 
