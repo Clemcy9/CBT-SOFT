@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_student %}
+<div class="container" style="width: 100vw; display: flex; justify-content: center;">
+    <div class="parent">
+        <h1>
+            User Dashboard
+        </h1>
+        <h2>
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        </h2>
+        <table style="width: 100%;">
+            <tr>
+                <thead>Available Exams</thead>
+            </tr>
+            <tr>
+                <th>Exams Title</th>
+                <th>Subject(course)</th>
+                <th>Class(level)</th>
+                <th>Duration (min)</th>
+
+            </tr>
+            {% for quiz in contents %}
+            <tr>
+                <td><a href="{% url 'cbt_app:take_quiz' quiz.id %}">{{quiz}}</a></td>
+                <td>{{quiz.course}}</td>
+                <td>{{quiz.level}}</td>
+                <td>{{quiz.duration}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="container" style="width: 100vw; display: flex; justify-content: center;">
+    <div class="parent">
+        <h1>
+            Result List
+        </h1>
+        <h2>
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        </h2>
+        <table style="width: 100%;">
+            <tr>
+                <thead>Recorded Attempt for:{{quiz_attempt}} </thead><br>
+                <thead>No. of Question:{{quiz_total_question}} </thead><br>
+                <thead>Total No. Student: {{quiz.sitting.count}}</thead><br>
+                <thead>Class average: </thead>
+            </tr>
+            <tr>
+                <th>Student Name</th>
+                <th>Score</th>
+                <th>Start</th>
+                <th>End</th>
+
+            </tr>
+            {% for x,y in quiz_pair.items %}
+            <tr>
+                
+                <td><a href="#">{{x.user}}</a></td>
+                <td>{{y}}</td>
+                <td>{{x.start_time}}</td>
+                <td>{{x.end_time}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

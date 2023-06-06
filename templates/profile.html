@@ -7,7 +7,7 @@
     <h1>Profile page</h1>
     Hello {{user.last_name|upper}}
 </div>
-    <form action="{% url 'auth1:profile' user.id %}" method="post" style="border-radius: 5px; width: fit-content; background-color: #f2f2f2; padding: 20px;">
+    <form enctype="multipart/form-data" action="{% url 'auth1:profile' user.id %}" method="post" style="border-radius: 5px; width: fit-content; background-color: #f2f2f2; padding: 20px;">
         {% csrf_token %}
         {% for message in messages %}
             {{message}}
@@ -20,6 +20,7 @@
         </fieldset>
         <fieldset>
             <legend>Academic Details</legend>
+            {{form.media}}
             {% for field in form %}
             <div style="display: flex; justify-content: space-between; ">
                 {{field.label_tag}}

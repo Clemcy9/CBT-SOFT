@@ -19,6 +19,22 @@ def index(request):
 @login_required
 def dashboard(request):
     # contents = Quiz.objects.filter(level = request.user)
+    user = request.user
+    is_teacher = not user.is_student #not a student
+    if is_teacher:
+        contents = Quiz.objects.filter(examiner=user)
+        sitting = Sitting.objects.filter(quiz__examiner=user)
+        quiz_sit_pair ={
+            x.quiz:Sitting.objects.filter(quiz=x.quiz).count() for x in sitting 
+        }
+        context = {
+            'contents':contents,
+            'sittings':sitting,
+            'quiz_pair':quiz_sit_pair,
+        }
+        return render(request, 'dashboard.html', context)
+        
+
     contents = Quiz.objects.all()
     context = {
         'contents':contents,
@@ -42,7 +58,7 @@ def take_quiz(request,quiz_id):
     else:
         return HttpResponse("You've already taken test")
     
-
+@login_required
 def quiz_progress(request):
     if request.method == 'POST':
         questions = request.POST
@@ -86,3 +102,27 @@ def api_all_question(request):
     json_data = serializers.serialize('json',choice)
     # return JsonResponse(json_data,safe=False)
     return HttpResponse(json_data)
+
+@login_required
+def result_list(request,quiz_id):
+    user = request.user
+    if not user.is_student:
+        contents = Quiz.objects.filter(examiner=user)
+        sitting = Sitting.objects.filter(quiz__examiner=user)
+        quiz_sit_pair ={
+            x:x.get_score() for x in sitting 
+        }
+        sits = Sitting.objects.filter(quiz__id =quiz_id)
+        context = {
+            'quiz_attempt':sits.count(),
+            'quiz_total_question':len(sits[0].question_all.split(',')),
+            'contents':contents,
+            'sittings':sitting,
+            'quiz_pair':quiz_sit_pair,
+        }
+        return render(request, 'result_list.html', context)
+        
+
+@login_required
+def result_details(request):
+    pass

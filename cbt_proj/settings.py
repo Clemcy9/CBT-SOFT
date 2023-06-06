@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!*k1dl(a+g!v82kag08nh_5vz(ale2k)y(ew8)w-v-dm%&did2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.102','127.0.0.1']
+ALLOWED_HOSTS = ['192.168.0.102','127.0.0.1','192.168.1.107']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cbt_app',
     'auth1',
     'file_processing',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +102,24 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            [
+                'Undo', 'Redo', 'Image',
+             '-', 'Bold', 'Italic', 'Underline',
+             '-', 'Link', 'Unlink', 'Anchor',
+             '-', 'Format',
+             
+             '-', 'Maximize',
+             
+            ],
+        ],  
+        'width': 'auto',
+        'toolbarCanCollapse': True,
+    },
+}
 
 
 # Internationalization

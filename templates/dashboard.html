@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.is_student %}
 <div class="container" style="width: 100vw; display: flex; justify-content: center;">
     <div class="parent">
         <h1>
@@ -33,5 +34,50 @@
         </table>
     </div>
 </div>
+{% else %}
+<div class="container" style="width: 100vw; display: flex; justify-content: center;">
+    <div class="parent">
+        <h1>
+            Examiner Dashboard
+        </h1>
+        <h2>
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        </h2>
+        <table style="width: 100%;">
+            <tr>
+                <thead>Prepared Exams</thead>
+            </tr>
+            <tr>
+                <th>Quiz Title</th>
+                <th>Subject(course)</th>
+                <th>Class</th>
+                <th>Date</th>
+                <th>Results</th>
+
+            </tr>
+            {% for x,y in quiz_pair.items %}
+            <tr>
+                
+                <td><a href="{% url 'cbt_app:result_list' x.id %}">{{x}}</a></td>
+                <td>{{x.course}}</td>
+                <td>{{x.level}}</td>
+                <td>{{x.start_time}}</td>
+                <td>{{y}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h3>
+            Create new quiz
+        </h3>
+        <ul>
+            <li><a href="">Particular topic in Course</a></li>
+            <li><a href="">Random Questions in Course</a> </li>
+            <li><a href="{% url 'file_processing:question_upload' %}">Upload new Question from excel file</a></li>
+        </ul>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

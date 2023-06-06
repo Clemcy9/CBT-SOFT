@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Min, Max,Count
 from django.conf import settings
 from django.utils.timezone import now
 from django.core.validators import validate_comma_separated_integer_list, MaxValueValidator
@@ -22,7 +23,14 @@ class Courses(models.Model):
     def __str__(self):
         return self.level.name +' '+ self.name
 
+class Topic(models.Model):
+    courses= models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
+    name = models.CharField(max_length=50,blank=False)
 
+    class Meta:
+        unique_together=[['courses','name']]
+    def __str__(self):
+        return self.name
 
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
@@ -33,6 +41,7 @@ ANSWER_ORDER_OPTIONS = (
 # model to store user choice for mcq
 class Question(models.Model):
     content = models.TextField(blank=False)
+    topic = models.ManyToManyField(Topic)
     answer_order = models.CharField(max_length=30, null=True, blank=True, choices=ANSWER_ORDER_OPTIONS, help_text=("The order in which multichoice answer options are displayed to the user"))
 
     def order_answers(self, queryset):
@@ -54,8 +63,6 @@ class Choice(models.Model):
 
     def __str__(self) -> str:
         return self.content
-
-
 
 # model to store respective quiz(exams)
 class Quiz(models.Model):
@@ -165,8 +172,12 @@ class Sitting(models.Model):
     current_score = models.IntegerField(default=0)
     start_time =models.DateTimeField(auto_now_add=True)
     end_time =models.DateTimeField(null=True, blank=True)
+    
     objects = models.Manager()
     sits = SittingManager()
+
+    def __str__(self):
+        return str(self.user) + ' result for '+str(self.quiz.title)
 
     # first_10 =[]
     def get_questions_in_10s(self):
@@ -202,7 +213,7 @@ class Sitting(models.Model):
     
     def sitting_complete(self):
         self.is_completed=True
-        self.end = now()
+        self.end_time = now()
         self.save()
     
     def record_attempt(self,quest,quest_choice):
@@ -231,6 +242,8 @@ class Sitting(models.Model):
         # sum all choice with is_answer == true, store result in dict correct
         correct= c.aggregate(count = models.Sum('is_answer'))
         self.current_score = correct['count']
+
+        self.end_time = now()
         self.save()
 
     def get_score(self):
@@ -238,11 +251,7 @@ class Sitting(models.Model):
         total_quest = len(all_quest)
         total_points = self.current_score
         percent_score = (total_points/total_quest)*100
-        return percent_score
-
-            
-
-
+        return round(percent_score,2)
 
 class UserGuess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
