@@ -1,1 +1,1 @@
-web: gunicorn 'cbt_proj.wsgi.application'
+web: gunicorn 'cbt_proj.wsgi'
