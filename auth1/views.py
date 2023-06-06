@@ -91,27 +91,32 @@ def profile(request,id):
     # if no profile, create one
     try:
         profile = Profile.objects.get(user__id = id)
+        print(f'profile found')
     except:
         profile = Profile(user=request.user)
+        print(f'profile created')
         profile.save()
     if request.method =='POST':
-        form = ProfileForm(request.POST)
-        print(f'data:{request.POST}')
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        print(f'error:{form.errors}')
         if form.is_valid():
-            print(f"post data: {form.cleaned_data['courses']}")
-            profile.phone_number = form.cleaned_data['phone_number']
-            profile.discipline = form.cleaned_data['discipline']
-            profile.courses.add(*[x for x in form.cleaned_data['courses']])
-            profile.current_level = form.cleaned_data['current_level']
-            profile.save()
+            form.save(commit=False)
+            form.user = request.user
+            form.save()
+            # print(f"post data: {form.cleaned_data['courses']}")
+            # profile.phone_number = form.cleaned_data['phone_number']
+            # profile.discipline = form.cleaned_data['discipline']
+            # profile.courses.add(*[x for x in form.cleaned_data['courses']])
+            # profile.current_level = form.cleaned_data['current_level']
+            # profile.save()
             # form.save()
-            messages.success(request, 'Profile Updated Successfully')
             # return HttpResponseRedirect('auth1:profile',args=(request.user,))
+            messages.success(request, 'Profile Updated Successfully')
             return redirect(reverse('cbt_app:index'),permanent=True)
           
     
     print(f'this is profile {profile}')
-    form = ProfileForm(data=profile.to_dict())
+    form = ProfileForm(data=profile.to_dict(), instance=profile)
     context = {
         'profile':profile,
         'form':form,

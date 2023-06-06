@@ -8,9 +8,13 @@ class QuestionUploadForm(forms.ModelForm):
         fields = ['course','title','upload']
         # fields = '__all__'
     
-    widgets = {
-            "upload" : forms.FileInput(attrs={'class':'form-control', 'required':False}),
-        }
+        widgets = {
+                "upload" : forms.FileInput(attrs={
+                    'accept':'.xlsx', 
+                    'class':'form-control', 
+                    'required':False
+                }),
+            }
 
     def __init__(self, *args, **kwargs):
         super(QuestionUploadForm, self).__init__(*args, **kwargs)
