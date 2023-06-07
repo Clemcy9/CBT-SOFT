@@ -155,9 +155,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://cbt.up.railway.app',
 ]
 
-ALLOWED_HOSTS = [
-    'localhost',
-]
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000',
