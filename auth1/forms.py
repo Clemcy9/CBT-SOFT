@@ -16,7 +16,7 @@ forms.PasswordInput
 
 class LoginForm(forms.Form):
     
-    email = forms.EmailField(required=True,initial='-adsc@gmail.com')
+    email = forms.EmailField(required=True,initial='-adss@gmail.com')
     password = forms.CharField(widget=forms.PasswordInput)
 
 class ProfileForm(forms.ModelForm):
