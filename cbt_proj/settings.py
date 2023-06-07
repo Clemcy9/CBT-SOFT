@@ -170,4 +170,6 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 # for whitenoise static file rendering
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
