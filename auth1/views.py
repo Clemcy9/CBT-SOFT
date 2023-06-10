@@ -11,10 +11,12 @@ from .forms import RegisterForm, LoginForm, ProfileForm
 
 
 def login_view(request):
+    print('login view')
     # print(request.user.is_authenticated)
     # print(f'user is:{request.user}')
     # if not login already
     if not request.user.is_authenticated:    
+        print('user not logged in')
         if request.method == 'POST':
             form = LoginForm(request.POST)
             if form.is_valid():
@@ -40,7 +42,7 @@ def login_view(request):
                         print('next not provided heeerrrrr')
                         messages.success(request, f'{user} login successfuly \n you can view profile page')
                         # return HttpResponseRedirect(reverse('auth1:profile',args=(user,)))(
-                        return HttpResponseRedirect(reverse('cbt_app:index'))
+                        return HttpResponseRedirect(reverse('cbt_app:dashboard'))
                 else:
                     messages.error(request, 'wrong password or email')
                     return render(request, 'login.html', {'forms':form}) 
@@ -49,12 +51,13 @@ def login_view(request):
             form = LoginForm()
             return render(request, 'login.html', {'forms':form})
     else:
-        return redirect(reverse('auth1:profile',args=(request.user,)),permanent=True)
+        print(f'user id from request is: {request.user.id}')
+        return redirect(reverse('auth1:profile',args=(request.user.id,)),permanent=True)
 
 def logout_view(request):
     logout(request)
     messages.info(request, 'successfully logout user')
-    return HttpResponseRedirect(reverse('cbt_app:index'))
+    return HttpResponseRedirect(reverse('auth1:login'))
 
 def register(request):
     print(request.user.is_authenticated)
@@ -83,12 +86,14 @@ def register(request):
             form = RegisterForm()
             return render(request, 'register.html', {'forms':form})
     else:
-        return redirect(reverse('auth1:profile',args=(request.user,)),permanent=True)
+        print(f'user id from request is: {request.user.id}')
+        return redirect(reverse('auth1:profile',args=(request.user.id,)),permanent=True)
             
 
 @login_required(login_url='/auth/login/')
 def profile(request,id):
     # if no profile, create one
+    print(f'recieved args: {id}')
     try:
         profile = Profile.objects.get(user__id = id)
         print(f'profile found')

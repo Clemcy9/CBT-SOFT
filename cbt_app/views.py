@@ -19,6 +19,7 @@ def index(request):
 @login_required
 def dashboard(request):
     # contents = Quiz.objects.filter(level = request.user)
+    print('dashboard route running')
     user = request.user
     is_teacher = not user.is_student #not a student
     if is_teacher:

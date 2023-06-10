@@ -28,19 +28,19 @@
     <!-- <h1>hello {{user.is_authenticated}}</h1> -->
     {% if not questions %}
     <ul style="list-style: none; display: flex; width: 80vw; justify-content: space-between;">
-        <li><a href="{% url 'cbt_app:index' %}">Home</a></li>
+        <!-- <li><a href="{% url 'cbt_app:index' %}">Home</a></li> -->
         {% if user.is_authenticated %}
 
         <li><a href="{% url 'auth1:profile' user.id %}">My profile</a></li>
         <li><a href="{% url 'cbt_app:dashboard' %}">My Dashboard</a></li>
        
-        <li><a href="{% url 'auth1:logout' %}">Sign Out</a></li>
+        <li><a href="{% url 'auth1:logout' %}">Logout</a></li>
           {% if not user.is_student %}
           <li><a href="{% url 'file_processing:question_upload' %}">Question Upload</a></li>
           {% endif %}
         {% else %}
-        <li><a href="{% url 'auth1:reg' %}">Sign Up</a></li>
-        <li><a href="{% url 'auth1:login' %}">Sign In</a></li>
+        <li><a href="{% url 'auth1:reg' %}">Register</a></li>
+        <li><a href="{% url 'auth1:login' %}">Login</a></li>
         {% endif %}
     </ul>
     <div style="display: flex; justify-content: center; width: 100%;">

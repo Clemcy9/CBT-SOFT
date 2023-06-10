@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!*k1dl(a+g!v82kag08nh_5vz(ale2k)y(ew8)w-v-dm%&did2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [ '*','https://cbt.up.railway.app','192.168.0.102','127.0.0.1','192.168.1.107']
+ALLOWED_HOSTS = [ '*','https://cbt.up.railway.app','192.168.0.102','127.0.0.1','192.168.1.166']
 
 
 # Application definition
@@ -79,18 +79,18 @@ WSGI_APPLICATION = 'cbt_proj.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
     'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'railway',
-       'USER': 'postgres',
-       'PASSWORD': 'y84TRLkTg1LKLq4qsBfZ',
-       'HOST': 'containers-us-west-39.railway.app',
-       'PORT': '7606',
-   }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    # 'default': {
+    #    'ENGINE': 'django.db.backends.postgresql',
+    #    'NAME': 'railway',
+    #    'USER': 'postgres',
+    #    'PASSWORD': 'y84TRLkTg1LKLq4qsBfZ',
+    #    'HOST': 'containers-us-west-39.railway.app',
+    #    'PORT': '7606',
+#    }
 }
 
 

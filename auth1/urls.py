@@ -5,9 +5,9 @@ app_name ='auth1'
 
 urlpatterns = [
     # path('',vi.home, name='home'),
-    path('reg/',vi.register,name='reg'),
-    path('login/',vi.login_view,name='login'),
-    path('logout/',vi.logout_view,name='logout'),
-    path('profile/<int:id>/',vi.profile,name='profile'),
+    path('reg/',view=vi.register,name='reg'),
+    path('login/',view=vi.login_view,name='login'),
+    path('logout/',view=vi.logout_view,name='logout'),
+    path('profile/<int:id>/',view=vi.profile,name='profile'),
     # path('accounts/', include('django.contrib.auth.urls'))
 ]
