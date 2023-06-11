@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load randomize %}
 {% block content %}
 <div class="container">
     <h3 style="text-align: end;">Time Left: <strong id="time-left-min"></strong>:<strong id="time-left-secs"></strong>secs</h3>
@@ -17,7 +17,7 @@
             {% endif %}
             <input type="hidden" value="{{question.id}}" name="question{{question.id}}">
             <fieldset>
-                {% for choice in question.choice_set.all %}
+                {% for choice in question.choice_set.all|randomize %}
                 <input  type="radio" name="choice{{question.id}}" value="{{choice.id}}" > 
                 <label for="choice{{question.id}}">{{choice.content}} </label> <br>
                 
