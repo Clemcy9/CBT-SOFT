@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!*k1dl(a+g!v82kag08nh_5vz(ale2k)y(ew8)w-v-dm%&did2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [ '*','https://cbt.up.railway.app','192.168.0.102','127.0.0.1','192.168.1.166']
 

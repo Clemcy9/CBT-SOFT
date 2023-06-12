@@ -238,11 +238,14 @@ class Sitting(models.Model):
         print(f'this is json dump {self.question_choice_pair}')
 
         # score
+        # if a particular choice exist in question-pair
         c=Choice.objects.filter(id__in=self.quest_pair.values())
-        # sum all choice with is_answer == true, store result in dict correct
-        correct= c.aggregate(count = models.Sum('is_answer'))
-        self.current_score = correct['count']
 
+        # sum all choice with is_answer == true, store result in dict correct
+        # models.functions.cast does type casting of boolean to int that it might be working in postgresql
+        correct= c.aggregate(count = models.Sum(models.functions.Cast('is_answer',models.IntegerField())))
+        self.current_score = correct['count']
+    
         self.end_time = now()
         self.save()
 
