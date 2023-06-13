@@ -9,9 +9,12 @@ class RegisterForm(forms.ModelForm):
         model = User
         fields = ['first_name','last_name','email','username','is_student','password']
         # exclude = []
-        widgets ={'password': forms.PasswordInput()}
+        widgets ={
+            # this helps in making password field appears as password rather than normal char field(textfield)
+            'password': forms.PasswordInput(),
+            'email':forms.EmailInput(attrs={'value':'-adss@gmail.com'})
+        }
 
-# this helps in making password field appears as password rather than normal char field(textfield)
 forms.PasswordInput
 
 class LoginForm(forms.Form):
