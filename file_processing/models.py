@@ -10,7 +10,7 @@ class QuestionUploads(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
     course = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True)
     title = models.CharField(max_length=100)
-    upload = models.FileField('Excel file',upload_to='./static/uploads',null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['xlsx','csv'])])
+    upload = models.FileField('Excel file',upload_to='./static/uploads',null=False, blank=False, validators=[FileExtensionValidator(allowed_extensions=['xlsx','csv'])])
     date_uploaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

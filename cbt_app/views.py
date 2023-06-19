@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.forms import formset_factory
 from django.core import serializers
+from django.db import models
 from useful_functions.quiz_result import question_choice_pair, mark_quiz, score
 from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz,Sitting
 from .forms import QuizForm,QuestionForm
@@ -109,17 +110,26 @@ def result_list(request,quiz_id):
     user = request.user
     if not user.is_student:
         contents = Quiz.objects.filter(examiner=user)
-        sitting = Sitting.objects.filter(quiz__examiner=user)
+        # sitting = Sitting.objects.filter(quiz__examiner=user)
+        sitting = Sitting.objects.filter(quiz__id =quiz_id)
         quiz_sit_pair ={
             x:x.get_score() for x in sitting 
         }
         sits = Sitting.objects.filter(quiz__id =quiz_id)
+        total_question =len(sits[0].question_all.split(','))
+        total_score = sits.aggregate(models.Sum('current_score'))
+        total_attempt =sits.count()
+        class_average = total_score['current_score__sum'] / total_attempt
+        pecertage_class_average = class_average/total_question * 100
+        print(f'total score ={total_score}\ntotal attempt ={total_attempt}\nclass average={class_average}')
         context = {
-            'quiz_attempt':sits.count(),
-            'quiz_total_question':len(sits[0].question_all.split(',')),
+            'quiz_attempt':total_attempt,
+            'quiz_total_question':total_question,
             'contents':contents,
-            'sittings':sitting,
+            'sitting_name':sits[0].quiz.title,
             'quiz_pair':quiz_sit_pair,
+            'class_average': class_average,
+            'pecertage_class_average': pecertage_class_average
         }
         return render(request, 'result_list.html', context)
         

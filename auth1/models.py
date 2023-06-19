@@ -21,7 +21,7 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(User,default=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(blank=True, max_length=16)
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
     courses = models.ManyToManyField(Courses)
@@ -37,6 +37,7 @@ class Profile(models.Model):
             'phone_number':self.phone_number,
             'discipline':self.discipline,
             'courses':self.courses,
-            'current_level':self.current_level
+            'current_level':self.current_level,
+            'about_me': self.about_me
         }
     

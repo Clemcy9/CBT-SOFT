@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load capitalize %}
 {% block content %}
 {% if user.is_student %}
 <div class="container" style="width: 100vw; display: flex; justify-content: center;">
@@ -38,7 +38,7 @@
 <div class="container" style="width: 100vw; display: flex; justify-content: center;">
     <div class="parent">
         <h1>
-            Result List
+            Result List for {{sitting_name|capitalize}}
         </h1>
         <h2>
             {% for message in messages %}
@@ -47,10 +47,11 @@
         </h2>
         <table style="width: 100%;">
             <tr>
+                <thead>Total No. Student: {{quiz_attempt}}</thead><br>
                 <thead>Recorded Attempt for:{{quiz_attempt}} </thead><br>
                 <thead>No. of Question:{{quiz_total_question}} </thead><br>
-                <thead>Total No. Student: {{quiz.sitting.count}}</thead><br>
-                <thead>Class average: </thead>
+                <thead>Class average:{{ class_average }}</thead><br>
+                <thead> % Class average:{{ pecertage_class_average }}</thead>
             </tr>
             <tr>
                 <th>Student Name</th>
@@ -62,7 +63,7 @@
             {% for x,y in quiz_pair.items %}
             <tr>
                 
-                <td><a href="#">{{x.user}}</a></td>
+                <td><a href="#">{{x.user.last_name|capitalize }} {{x.user.first_name|capitalize }}</a></td>
                 <td>{{y}}</td>
                 <td>{{x.start_time}}</td>
                 <td>{{x.end_time}}</td>

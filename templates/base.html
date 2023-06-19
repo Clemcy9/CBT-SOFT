@@ -38,6 +38,7 @@
         <li><a href="{% url 'auth1:logout' %}">Logout</a></li>
           {% if not user.is_student %}
           <li><a href="{% url 'file_processing:question_upload' %}">Question Upload</a></li>
+          <li><a href="{% url 'admin:index' %}">Admin</a></li>
           {% endif %}
         {% else %}
         <li><a href="{% url 'auth1:reg' %}">Register</a></li>

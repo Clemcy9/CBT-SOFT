@@ -12,7 +12,7 @@ class QuestionUploadForm(forms.ModelForm):
                 "upload" : forms.FileInput(attrs={
                     'accept':'.xlsx', 
                     'class':'form-control', 
-                    'required':False
+                    'required':True
                 }),
             }
 

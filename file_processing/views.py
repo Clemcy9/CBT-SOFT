@@ -25,7 +25,8 @@ def question_upload(request):
             print(f'title:{title}\nfile_name2:{file_name2}')
             t1 = Thread(target=xl2db, args=[str(file_name2),course])
             t1.start()
-            return HttpResponse(f'successfully Uploaded {file_name2}')
+            messages.info(request, f'File uploaded successfully, Questions currently being indexed on the background')
+            return HttpResponseRedirect(reverse('cbt_app:dashboard'))
         else:
             print(f'error:{request.POST}')
             messages.error(request,'something went wrong')

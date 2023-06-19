@@ -71,6 +71,7 @@ class Quiz(models.Model):
     questions = models.ManyToManyField(Question)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE,null=True)
+    # is_open = models.BooleanField(default=True)
 
     # features of quiz
     single_attempt = models.BooleanField(blank=False, default=True)

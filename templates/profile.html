@@ -4,7 +4,11 @@
 
 <div class="forms" >
     <div>
-    <h1>Profile page</h1>
+    {% if user.is_student%}
+     <h1>Sudent Profile Page</h1>
+     {% else %}
+     <h1>Examiner Profile page</h1>
+     {% endif %}
     Hello {{user.last_name|upper}}
 </div>
     <form enctype="multipart/form-data" action="{% url 'auth1:profile' user.id %}" method="post" style="border-radius: 5px; width: fit-content; background-color: #f2f2f2; padding: 20px;">
