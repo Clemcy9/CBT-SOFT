@@ -79,6 +79,7 @@ class Quiz(models.Model):
     random_order = models.BooleanField(blank=False, default=True, help_text='orders with which questions will appear')
     max_questions = models.PositiveIntegerField(help_text='Display the questions in a random order or as they are set?')
     duration = models.IntegerField(help_text='duration in minutes')
+    # time_left =  models.IntegerField(help_text='remaining time in minutes')
     start_time =models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField()
 

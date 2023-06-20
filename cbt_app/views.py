@@ -10,6 +10,7 @@ from django.db import models
 from useful_functions.quiz_result import question_choice_pair, mark_quiz, score
 from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz,Sitting
 from .forms import QuizForm,QuestionForm
+import json
 
 # Create your views here.
 
@@ -94,10 +95,10 @@ def quiz_progress(request):
 
 def api_all_question(request):
     if request.method == 'POST':
-        json_data = request.POST
+        json_data = json.loads(request.body)
         print(f'type of jdata:{type(json_data)}\njdata:{json_data}')
         # data = serializers.deserialize()
-        return JsonResponse('data received')
+        return JsonResponse('data received',safe=False)
 
     question = Question.objects.all().order_by('?')
     choice = Choice.objects.all()

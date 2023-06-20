@@ -27,6 +27,28 @@
         <input type="submit" value="Next" style="margin-top: 2em;" id="submit">
     </form>
 <script>
+
+// fetch post and get request
+async function makeRequest(url, method, body){
+    let headers ={
+        'X-Requested-With':'XMLHttpRequest',
+        'Content-Type':'application/json'
+    }
+
+    if(method == 'post'){
+        const csrf = document.querySelector('[name = csrfmiddlewaretoken]').value
+        headers['X-CSRFToken'] = csrf
+    }
+
+    let response = await fetch(url,{
+        method:method,
+        headers:headers,
+        body:body
+    })
+
+    return await response.statusText()
+} 
+
     
 // timer countdown
         const timeLeftmin = document.querySelector('#time-left-min');
@@ -46,13 +68,20 @@
                     submit.click()
                 }
                 timeLeft--;
+                // let post =
                 min = Math.floor(timeLeft/60)
                 secs= Math.round(((timeLeft/60)-min)*60)
                 timeLeftmin.innerHTML = min
                 timeLeftsec.innerHTML = secs
             }, 1000)
+
+            
+        }
+        function updateDb(){
+            setInterval(makeRequest('http://127.0.0.1:8000/quiz/api/','post',timeLeft), 6000)
         }
 document.addEventListener(onload,countDown())
+document.addEventListener(onload,updateDb())
 </script>
 </div>
 {% endblock %}
