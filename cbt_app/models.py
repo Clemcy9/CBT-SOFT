@@ -42,6 +42,7 @@ ANSWER_ORDER_OPTIONS = (
 class Question(models.Model):
     content = models.TextField(blank=False)
     topic = models.ManyToManyField(Topic)
+    upload_title = models.CharField(max_length=255, null=True, default='no title')
     answer_order = models.CharField(max_length=30, null=True, blank=True, choices=ANSWER_ORDER_OPTIONS, help_text=("The order in which multichoice answer options are displayed to the user"))
 
     def order_answers(self, queryset):
@@ -71,7 +72,7 @@ class Quiz(models.Model):
     questions = models.ManyToManyField(Question)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE,null=True)
-    # is_open = models.BooleanField(default=True)
+    is_available = models.BooleanField(default=True)
 
     # features of quiz
     single_attempt = models.BooleanField(blank=False, default=True)
