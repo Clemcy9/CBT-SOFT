@@ -56,7 +56,7 @@ def take_quiz(request,quiz_id):
         context={
             'questions':questions,
             'sitting':sitting,
-            'duration':sitting.quiz.duration - duration
+            'duration':duration or sitting.quiz.duration
         }
         print(f'this is form {questions}')
         return render(request, 'quiz.html',context)
@@ -65,8 +65,12 @@ def take_quiz(request,quiz_id):
 
 def update_timeleft(request, quiz_id):
     if request.method == 'POST':
-        userSitting = Sitting.objects.filter(user =request.user, quiz__id =quiz_id )[0]
-        userSitting.update_duration( new_value=float(request.body))
+        # userSitting = Sitting.objects.filter(user =request.user, quiz__id =quiz_id )[0]
+        # data = (bytes.decode(request.body,"utf-8"))
+        data = json.loads(request.body)
+        print(f'post data is {data}')
+        userSitting = Sitting.objects.get(id=data['sitting'])
+        userSitting.update_duration( new_value=float(data['time']))
         print(f'time left now is {userSitting.duration}, id is {userSitting.id}')
         return HttpResponse('updated time')
 
