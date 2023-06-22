@@ -51,20 +51,30 @@ def take_quiz(request,quiz_id):
     sitting = Sitting.sits.check_sitting(request.user,quiz)
     if sitting:
         questions = sitting.get_questions_in_10s().order_by('?')
+        duration =sitting.duration
+        print(f'this is duration {duration}, main id is {sitting.id}')
         context={
             'questions':questions,
             'sitting':sitting,
-            'duration':sitting.quiz.duration
+            'duration':sitting.quiz.duration - duration
         }
         print(f'this is form {questions}')
         return render(request, 'quiz.html',context)
     else:
         return HttpResponse("You've already taken test")
-    
+
+def update_timeleft(request, quiz_id):
+    if request.method == 'POST':
+        userSitting = Sitting.objects.filter(user =request.user, quiz__id =quiz_id )[0]
+        userSitting.update_duration( new_value=float(request.body))
+        print(f'time left now is {userSitting.duration}, id is {userSitting.id}')
+        return HttpResponse('updated time')
+
 @login_required
 def quiz_progress(request):
     if request.method == 'POST':
         questions = request.POST
+        print(f'these are question posted {questions}')
         questions= dict(questions)
         sitting_id = questions['sitting'][0]
         # print(f'sitting id is {sitting_id} and type is {type(sitting_id)}')

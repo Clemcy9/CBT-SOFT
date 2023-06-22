@@ -26,31 +26,32 @@
         {% endfor %}
         <input type="submit" value="Next" style="margin-top: 2em;" id="submit">
     </form>
+</div>
 <script>
 
 // fetch post and get request
-async function makeRequest(url, method, body){
-    let headers ={
-        'X-Requested-With':'XMLHttpRequest',
-        'Content-Type':'application/json'
-    }
+    async function makeRequest(url, method, body){
+        let headers ={
+            'X-Requested-With':'XMLHttpRequest',
+            'Content-Type':'application/json'
+        }
 
-    if(method == 'post'){
-        const csrf = document.querySelector('[name = csrfmiddlewaretoken]').value
-        headers['X-CSRFToken'] = csrf
-    }
+        if(method == 'post'){
+            const csrf = document.querySelector('[name = csrfmiddlewaretoken]').value
+            headers['X-CSRFToken'] = csrf
+        }
 
-    let response = await fetch(url,{
-        method:method,
-        headers:headers,
-        body:body
-    })
+        let response = await fetch(url,{
+            method:method,
+            headers:headers,
+            body:JSON.stringify(body)
+        })
 
-    return await response.statusText()
-} 
+        return await response.statusText
+    } 
 
     
-// timer countdown
+    // timer countdown
         const timeLeftmin = document.querySelector('#time-left-min');
         const timeLeftsec = document.querySelector('#time-left-secs');
         const submit = document.querySelector('#submit');
@@ -78,10 +79,12 @@ async function makeRequest(url, method, body){
             
         }
         function updateDb(){
-            setInterval(makeRequest('http://127.0.0.1:8000/quiz/api/','post',timeLeft), 6000)
+            let data = {"time":timeLeft, "sitting":{{sitting}}}
+            setInterval(function(){
+                makeRequest("{% url 'cbt_app:time_update' sitting.quiz.id %}",'post',data)
+            }, 6000)
         }
-document.addEventListener(onload,countDown())
-document.addEventListener(onload,updateDb())
+    document.addEventListener(onload,countDown())
+    document.addEventListener(onload,updateDb())
 </script>
-</div>
 {% endblock %}

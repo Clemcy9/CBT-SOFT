@@ -78,7 +78,7 @@ class Quiz(models.Model):
     single_attempt = models.BooleanField(blank=False, default=True)
     random_order = models.BooleanField(blank=False, default=True, help_text='orders with which questions will appear')
     max_questions = models.PositiveIntegerField(help_text='Display the questions in a random order or as they are set?')
-    duration = models.IntegerField(help_text='duration in minutes')
+    duration = models.FloatField(help_text='duration in minutes', default=0)
     # time_left =  models.IntegerField(help_text='remaining time in minutes')
     start_time =models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField()
@@ -175,6 +175,7 @@ class Sitting(models.Model):
     current_score = models.IntegerField(default=0)
     start_time =models.DateTimeField(auto_now_add=True)
     end_time =models.DateTimeField(null=True, blank=True)
+    duration = models.FloatField(help_text='duration in minutes', default=0)
     
     objects = models.Manager()
     sits = SittingManager()
@@ -258,6 +259,10 @@ class Sitting(models.Model):
         total_points = self.current_score
         percent_score = (total_points/total_quest)*100
         return round(percent_score,2)
+
+    def update_duration(self, new_value):
+        self.duration = new_value
+        self.save()
 
 class UserGuess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
