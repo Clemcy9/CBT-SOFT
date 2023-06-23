@@ -4,17 +4,23 @@ from .models import Topic,Discipline,Level,Courses,Question,Quiz,Result,Choice,S
 
 # Register your models here.
 
-class QuestionInline(admin.StackedInline):
+class ChoiceInline(admin.StackedInline):
     model = Choice
 
 class TopicInline(admin.StackedInline):
     model = Topic
 
+class QuestionInline(admin.StackedInline):
+    model = Question
 
 class QuestionAdmin(admin.ModelAdmin):
     # fields =['__all__']
-    inlines = [QuestionInline]
+    inlines = [ChoiceInline]
+
+# class TopicAdmin(admin.ModelAdmin):
+#     inlines = [QuestionInline]
 
 # admin.site.register(User, UserAdmin)
 admin.site.register([Discipline,Level,Courses,Quiz,Result,Choice,Sitting,Topic])
 admin.site.register(Question,QuestionAdmin)
+# admin.site.register(Topic,TopicAdmin)
