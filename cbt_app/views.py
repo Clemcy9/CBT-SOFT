@@ -11,8 +11,33 @@ from useful_functions.quiz_result import question_choice_pair, mark_quiz, score
 from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz,Sitting
 from .forms import QuizForm,QuestionForm
 import json
+from django.utils.timezone import now
 
 # Create your views here.
+
+# create quiz funtions
+def create_quiz_by_uploads(user,title,course,uploading):
+    uploading.join() #wait for uploading to complete
+    print('starting quiz creation')
+    print(f'user is = {user}\ntitle = {title}\ncourse ={course}\ntype of course ={type(course)}')
+    l1 = course.level
+    print('uploading completed, now creating quiz')
+    questions = Question.objects.filter(upload_title=title)
+    total_questions = questions.count()
+    print(f'total questions are {total_questions}')
+    quiz = Quiz(examiner=user,title=title, course = course,level =l1,max_questions=total_questions,end_time=now())
+    quiz.save()
+    for quest in questions:
+        quiz.questions.add(quest)
+    quiz.save()
+    print('quiz created successfully')
+    return True
+
+def create_quiz_by_topic(course, topic):
+    pass
+
+def create_quiz_by_random(title):
+    pass
 
 def index(request):
     return render(request, 'index.html')
