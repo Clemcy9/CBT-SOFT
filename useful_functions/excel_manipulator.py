@@ -1,13 +1,19 @@
 from openpyxl import load_workbook
 from openpyxl.worksheet import worksheet as wss
 from threading import Thread
-from cbt_app.models import Question,Choice,Topic
+from cbt_app.models import Question,Choice,Topic,UploadTitle
 
-def xl2db(url,course,title):
+
+
+def xl2db(user,url,course,title):
     wb = load_workbook(url)
     ws = wb.active
     print(f'reading from the file: {ws["A2"].value}')
 
+    # create uploadTitle db
+    ut = UploadTitle.objects.create(examiner=user, title =title)
+
+    
     for row in wss.Worksheet.iter_rows(ws,min_row=3,max_col=6,max_row=102):
         for cell in row:
             # if cell.value == None:
@@ -32,7 +38,9 @@ def xl2db(url,course,title):
                     return 1
                 print(f'this is t in question block: {t}')
                 global q
-                q = Question.objects.get_or_create(content=cell.value, upload_title=title)[0]
+                q = Question.objects.get_or_create(content=cell.value)[0]
+                q.upload_title.add(ut)
+                print('title added to question id {q.id}')    
                 try:
                     q.topic.add(t)
                     print('topic has paired with question')
@@ -40,16 +48,24 @@ def xl2db(url,course,title):
                     print('couldnt pair question to topic')
             # options col
             elif cell.col_idx==3:
+                print(f'now in option 1')
                 if cell.value:
-                    c1 = Choice.objects.create(content=cell.value,question=q)
+                    c1 = Choice.objects.update_or_create(content=cell.value,question=q)
+                    print(f'option 1 not empty, executed')
                     
             elif cell.col_idx==4:
+                print(f'now in option 2')
                 if cell.value:
-                    c2 = Choice.objects.create(content=cell.value,question=q)
+                    print('option 2 not empty, executed')
+                    c2 = Choice.objects.update_or_create(content=cell.value,question=q)
             elif cell.col_idx==5:
+                print(f'now in option 3')
                 if cell.value:
-                    c3 = Choice.objects.create(content=cell.value,question=q)
+                    print('option 3 not empty, executed')
+                    c3 = Choice.objects.update_or_create(content=cell.value,question=q)
             elif cell.col_idx==6:
+                print(f'now in option anser')
                 if cell.value:
-                    a = Choice.objects.create(content=cell.value,question=q, is_answer=True)
+                    print('option answer not empty, executed')
+                    a = Choice.objects.update_or_create(content=cell.value,question=q, is_answer=True)
             

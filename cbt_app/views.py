@@ -8,7 +8,7 @@ from django.forms import formset_factory
 from django.core import serializers
 from django.db import models
 from useful_functions.quiz_result import question_choice_pair, mark_quiz, score
-from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz,Sitting
+from .models import Discipline, Level, Courses,Question, Choice, Result, Quiz,Sitting,UploadTitle
 from .forms import QuizForm,QuestionForm
 import json
 from django.utils.timezone import now
@@ -22,7 +22,10 @@ def create_quiz_by_uploads(user,title,course,uploading):
     print(f'user is = {user}\ntitle = {title}\ncourse ={course}\ntype of course ={type(course)}')
     l1 = course.level
     print('uploading completed, now creating quiz')
-    questions = Question.objects.filter(upload_title=title)
+    # questions = Question.objects.filter(upload_title=title)
+    # uploaded title object
+    ut = UploadTitle.objects.filter(examiner=user,title=title)[0]
+    questions = ut.question_set.all()
     total_questions = questions.count()
     print(f'total questions are {total_questions}')
     quiz = Quiz(examiner=user,title=title, course = course,level =l1,max_questions=total_questions,end_time=now())

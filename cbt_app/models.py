@@ -10,6 +10,7 @@ class Discipline(models.Model):
     name = models.CharField(max_length=50,blank=False, unique=True)
     def __str__(self):
         return self.name
+
 class Level(models.Model):
     name = models.CharField(max_length=50,blank=False, unique=True)
 
@@ -26,11 +27,19 @@ class Courses(models.Model):
 class Topic(models.Model):
     courses= models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
     name = models.CharField(max_length=50,blank=False)
-
+    
     class Meta:
         unique_together=[['courses','name']]
     def __str__(self):
         return self.name
+
+class UploadTitle(models.Model):
+    # courses= models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True, blank=True)
+    title = models.CharField(max_length=50,blank=False)
+    examiner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+    
+    def __str__(self):
+        return self.title
 
 ANSWER_ORDER_OPTIONS = (
     ('content', ('Content')),
@@ -42,7 +51,8 @@ ANSWER_ORDER_OPTIONS = (
 class Question(models.Model):
     content = models.TextField(blank=False)
     topic = models.ManyToManyField(Topic)
-    upload_title = models.CharField(max_length=255, null=True, default='no title')
+    # upload_title = models.CharField(max_length=255, null=True, default='no title')
+    upload_title = models.ManyToManyField(UploadTitle)
     answer_order = models.CharField(max_length=30, null=True, blank=True, choices=ANSWER_ORDER_OPTIONS, help_text=("The order in which multichoice answer options are displayed to the user"))
 
     def order_answers(self, queryset):
