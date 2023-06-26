@@ -20,6 +20,7 @@ def xl2db(url,course,title):
         
         for cell in row:
             print(f'this inner counter {inner}')
+            inner = inner +1
             # topic col
             if cell.col_idx ==1:
                 # t=Topic.objects.create(name=cell.value)
@@ -39,24 +40,25 @@ def xl2db(url,course,title):
 
                 # if question already in db, move to another question
                 try: 
-                    global qu
-                    qu=Question.objects.get(content=cell.value)
+                    q =Question.objects.get(content=cell.value)
+                    print(f'question already in db... now adding title and questionid ={q.id}')
+                    q.upload_title=title
+                    q.save()
                 except:
-                    print(f'question already in db, db id = {qu.id}')
+                    print(f'question does not exit, creating question')
                     print(cell.value, cell, cell.col_idx)
                     break
-                # print(f'this is t in question block: {t}')
-                global quest
-                # quest = Question.objects.get_or_create(content=cell.value,upload_title=title)[0]
-                # quest.upload_title=title
-                # quest.save()
-                quest =Question.objects.create(content=cell.value,upload_title=title)
+                    # print(f'this is t in question block: {t}')
+                    global quest
+                    # quest = Question.objects.get_or_create(content=cell.value,upload_title=title)[0]
+                    quest =Question.objects.create(content=cell.value,upload_title=title)
+                    print(f'this is quest id = {quest.id}')
 
-                try:
-                    quest.topic.add(t)
-                    print('topic has paired with question')
-                except:
-                    print('couldnt pair question to topic')
+                    try:
+                        quest.topic.add(t)
+                        print('topic has paired with question')
+                    except:
+                        print('couldnt pair question to topic')
             # options col
             elif cell.col_idx==3:
                 if cell.value:
@@ -71,6 +73,6 @@ def xl2db(url,course,title):
             elif cell.col_idx==6:
                 if cell.value:
                     a = Choice.objects.create(content=cell.value,question=quest, is_answer=True)
-            inner = inner +1
+            
         outer = outer +1
             
