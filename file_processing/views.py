@@ -18,6 +18,7 @@ def question_upload(request):
             title = form.cleaned_data['title']
             file_name = form.cleaned_data['upload']
             course = form.cleaned_data['course']
+            duration = form.cleaned_data['duration']
             # change the file saving location to user email/the name of file
             form.instance.upload.name = str(course)+ '/' + str(title)+'.'+str(file_name).split('.')[1]
             form.save()
@@ -27,7 +28,7 @@ def question_upload(request):
             t1 = Thread(target=xl2db, args=[request.user,str(file_name2),course,title])
             t1.start()
             messages.info(request, f'File uploaded successfully, Questions currently being indexed on the background')
-            t2 = Thread(target=create_quiz_by_uploads, args=[request.user, title, course, t1])
+            t2 = Thread(target=create_quiz_by_uploads, args=[request.user, title, course, t1,duration])
             t2.start()
             # create_quiz_by_uploads(request.user, title, course,uploading = t1)
             return HttpResponseRedirect(reverse('cbt_app:dashboard'))

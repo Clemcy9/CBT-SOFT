@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-
 {% block content %}
 {% if user.is_student %}
 <div class="container" style="width: 100vw; display: flex; justify-content: center;">
     <div class="parent">
         <h1>
-            User Dashboard
+            Student Dashboard
         </h1>
         <h2>
             {% for message in messages %}
@@ -54,17 +53,19 @@
                 <th>Subject(course)</th>
                 <th>Class</th>
                 <th>Date</th>
-                <th>Results</th>
+                <th>Is active</th>
+                <!-- <th>Results</th> -->
 
             </tr>
-            {% for x,y in quiz_pair.items %}
+            {% for x in contents %}
             <tr>
                 
                 <td><a href="{% url 'cbt_app:result_list' x.id %}">{{x}}</a></td>
                 <td>{{x.course}}</td>
                 <td>{{x.level}}</td>
                 <td>{{x.start_time}}</td>
-                <td>{{y}}</td>
+                <td>{{x.is_available}}</td>
+                <!-- <td>{{y}}</td> -->
             </tr>
             {% endfor %}
         </table>

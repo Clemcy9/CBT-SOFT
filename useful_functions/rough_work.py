@@ -160,3 +160,27 @@ def xl2db(url,course,title):
         outer = outer +1
             
 """
+
+# timer controled duration db update
+# function updateDb(){
+#             // let data = {'time':timeLeft, 'sitting': {{sitting.id}} }
+#             setInterval(function(){
+#                 makeRequest("{% url 'cbt_app:time_update' sitting.quiz.id %}",'post',{'time':timeLeft/60, 'sitting': {{sitting.id}} })
+#             }, 6000)
+#         }
+
+
+# loop through dict in template django
+"""
+{% for x,y in quiz_pair.items %}
+            <tr>
+                
+                <td><a href="{% url 'cbt_app:result_list' x.id %}">{{x}}</a></td>
+                <td>{{x.course}}</td>
+                <td>{{x.level}}</td>
+                <td>{{x.start_time}}</td>
+                <td>{{x.is_available}}</td>
+                <td>{{y}}</td>
+            </tr>
+            {% endfor %}
+"""
