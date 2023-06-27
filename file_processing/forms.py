@@ -1,5 +1,7 @@
 from django import forms
-from .models import QuestionUploads, CourseTemplate
+from .models import QuestionUploads, CourseTemplate,Courses
+from auth1.models import Profile
+
 
 class QuestionUploadForm(forms.ModelForm):
     # upload = forms.FileField(required=False, )
@@ -18,6 +20,13 @@ class QuestionUploadForm(forms.ModelForm):
                 }),
             }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,user, *args, **kwargs):
         super(QuestionUploadForm, self).__init__(*args, **kwargs)
+        self.user = user
+        self.profile = Profile.objects.get(user=user)
+        self.my_courses = self.profile.courses.all()
+        print(f'from quest upload--\nuser={self.user}\nprofile={self.profile}\ncourses={self.my_courses}')
         self.fields['upload'].required = True
+        # this worked, but must be a list
+        # self.fields['course'] = forms.ChoiceField(choices=self.my_courses)
+        self.fields['course'].queryset = self.my_courses

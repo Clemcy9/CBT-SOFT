@@ -37,6 +37,6 @@ def question_upload(request):
             messages.error(request,'something went wrong')
             form = QuestionUploadForm(request.POST) 
             return render(request, 'question_upload.html',{'form':form})
-    form = QuestionUploadForm()
+    form = QuestionUploadForm(user=request.user)
     
     return render(request, 'question_upload.html',{'form':form})
