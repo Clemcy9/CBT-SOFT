@@ -6,7 +6,7 @@ from auth1.models import Profile
 class QuestionUploadForm(forms.ModelForm):
     # upload = forms.FileField(required=False, )
     duration = forms.FloatField(help_text='enter duration in minutes', required=True,)
-    activate = forms.BooleanField()
+    activate = forms.BooleanField(required=False)
     class Meta:
         model =QuestionUploads
         fields = ['course','title','upload']
@@ -18,9 +18,10 @@ class QuestionUploadForm(forms.ModelForm):
                     'class':'form-control', 
                     # 'required':True
                 }),
+                
             }
 
-    def __init__(self,user, *args, **kwargs):
+    def __init__(self, *args, user, **kwargs):
         super(QuestionUploadForm, self).__init__(*args, **kwargs)
         self.user = user
         self.profile = Profile.objects.get(user=user)
