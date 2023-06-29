@@ -10,18 +10,23 @@
             <table style="width: 100%; border-spacing: 3px;">
                 {% csrf_token %}
                 {% for field in form %}
-                    <tr>
-                        <td style="padding: .3em;">{{field.label_tag}} </td>
-                        <td>{{field}}</td>
-                    </tr>
-                    <tr>
-                        {% for error in field.errors %}
-                        {{error}}
-                        <hr style="background-color: red; height: 1px;">
-                        {% endfor %}
+                    {% if field == form.topic %}
+                        <h4>this is topic</h4>
+                        {{field}}
+                    {% else %}
+                        <tr>
+                            <td style="padding: .3em;">{{field.label_tag}} </td>
+                            <td>{{field}}</td>
+                        </tr>
+                        <tr>
+                            {% for error in field.errors %}
+                            {{error}}
+                            <hr style="background-color: red; height: 1px;">
+                            {% endfor %}
 
-                    </tr>
-                    {% endfor %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
                     <tr>
                         {% for message in messages %}
                         <p style="background-color:rgba(233, 73, 97, 0.641); text-align: center; padding: .2em; font-size: small;">{{message|upper}}</p>

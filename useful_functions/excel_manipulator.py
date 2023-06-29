@@ -40,12 +40,14 @@ def xl2db(user,url,course,title):
                 global q
                 q = Question.objects.get_or_create(content=cell.value)[0]
                 q.upload_title.add(ut)
-                print('title added to question id {q.id}')    
-                try:
-                    q.topic.add(t)
-                    print('topic has paired with question')
-                except:
-                    print('couldnt pair question to topic')
+                print('title added to question id {q.id}') 
+                # check if topic does not exist then create it
+                if not q.topic.all():   
+                    try:
+                        q.topic.add(t)
+                        print('topic has paired with question')
+                    except:
+                        print('couldnt pair question to topic')
             # options col
             elif cell.col_idx==3:
                 print(f'now in option 1')

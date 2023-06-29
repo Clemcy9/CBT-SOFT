@@ -1,5 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.timezone import now
 from .forms import CreateByTopicForm
 from cbt_app.models import UploadTitle, Question, Quiz
 
@@ -22,7 +23,7 @@ def create_quiz(questions,**kwargs):
 
     quiz = Quiz(end_time=now(), **kwargs)
     quiz.save()
-    for quest in kwargs['questions']:
+    for quest in questions:
         quiz.questions.add(quest)
     quiz.save()
     print('quiz created successfully')
@@ -48,7 +49,7 @@ def create_quiz_by_uploads(user,title,course,uploading,duration,activate):
         'duration' : duration,
         'is_available' : activate,
     }
-    create_quiz(questions=questions, kwargs= data)
+    create_quiz(questions=questions, **data)
     return True
 
 def create_quiz_by_topic(request):
