@@ -4,7 +4,7 @@ from django.contrib import messages
 from .forms import QuestionUploadForm, CourseTemplate
 from useful_functions.excel_manipulator import xl2db
 from threading import Thread
-from cbt_app.views import create_quiz_by_uploads
+from create_quiz.views import create_quiz_by_uploads
 
 # Create your views here.
 

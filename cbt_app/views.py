@@ -15,33 +15,6 @@ from django.utils.timezone import now
 
 # Create your views here.
 
-# create quiz funtions
-def create_quiz_by_uploads(user,title,course,uploading,duration,activate):
-    uploading.join() #wait for uploading to complete
-    print('starting quiz creation')
-    print(f'user is = {user}\ntitle = {title}\ncourse ={course}\ntype of course ={type(course)}')
-    l1 = course.level
-    print('uploading completed, now creating quiz')
-    # questions = Question.objects.filter(upload_title=title)
-    # uploaded title object
-    ut = UploadTitle.objects.filter(examiner=user,title=title)[0]
-    questions = ut.question_set.all()
-    total_questions = questions.count()
-    print(f'total questions are {total_questions}')
-    quiz = Quiz(examiner=user,title=title, course = course,level =l1,max_questions=total_questions,end_time=now(), duration=duration,is_available=activate)
-    quiz.save()
-    for quest in questions:
-        quiz.questions.add(quest)
-    quiz.save()
-    print('quiz created successfully')
-    return True
-
-def create_quiz_by_topic(course, topic):
-    pass
-
-def create_quiz_by_random(title):
-    pass
-
 def index(request):
     return render(request, 'index.html')
 

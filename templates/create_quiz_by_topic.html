@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="parent" style="display: flex; width: 100vw; height: 80vh;justify-content: center; align-items:center ;">
+    <div class="container" style=" border-radius: 5px; background-color: #f2f2f2; padding: 20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <h2>
+            Create Quiz by Topic
+        </h2>
+        <form enctype="multipart/form-data" method="post" action="{% url 'file_processing:question_upload' %}">
+            <!-- <input type="text" hidden name="user" value="{{user}}"> -->
+            <table style="width: 100%; border-spacing: 3px;">
+                {% csrf_token %}
+                {% for field in form %}
+                    <tr>
+                        <td style="padding: .3em;">{{field.label_tag}} </td>
+                        <td>{{field}}</td>
+                    </tr>
+                    <tr>
+                        {% for error in field.errors %}
+                        {{error}}
+                        <hr style="background-color: red; height: 1px;">
+                        {% endfor %}
+
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        {% for message in messages %}
+                        <p style="background-color:rgba(233, 73, 97, 0.641); text-align: center; padding: .2em; font-size: small;">{{message|upper}}</p>
+                        {% endfor %}
+
+                    </tr>
+                    
+                </table>
+            
+            <input type="submit" value="Upload" style="background-color: #4CAF50; /* Green */
+            border: none; color: white; padding: 12px 22px; text-align: center; text-decoration: none; display: inline-block;
+            ; cursor: pointer;">
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

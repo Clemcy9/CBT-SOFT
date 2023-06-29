@@ -73,8 +73,8 @@
             Create new quiz
         </h3>
         <ul>
-            <li><a href="">Particular topic in Course</a></li>
             <li><a href="">Random Questions in Course</a> </li>
+            <li><a href="{% url 'create_quiz:by_topic' %}">Particular topic in Course</a></li>
             <li><a href="{% url 'file_processing:question_upload' %}">Upload new Question from excel file</a></li>
         </ul>
     </div>

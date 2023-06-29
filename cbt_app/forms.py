@@ -35,7 +35,7 @@ class QuizForm(forms.Form):
 # not working
 class QuestionForm(forms.Form):
     def __init__(self, question, *args,**kwargs) -> None:
-        super().__init__( question, *args,**kwargs)
+        super().__init__(*args,**kwargs)
         choice_list =[x for x in question[0].choice_set.all()]
         self.fields['question'] = forms.CharField(max_length=300)
         self.fields['choice'] = forms.ChoiceField(choices=choice_list,widget=RadioSelect)
