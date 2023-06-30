@@ -135,8 +135,8 @@ def result_list(request,quiz_id):
         total_question =len(sits[0].question_all.split(','))
         total_score = sits.aggregate(models.Sum('current_score'))
         total_attempt =sits.count()
-        class_average = total_score['current_score__sum'] / total_attempt
-        pecertage_class_average = class_average/total_question * 100
+        class_average = round(total_score['current_score__sum'] / total_attempt,2)
+        pecertage_class_average = round(class_average/total_question * 100,2)
         print(f'total score ={total_score}\ntotal attempt ={total_attempt}\nclass average={class_average}')
         context = {
             'quiz_attempt':total_attempt,

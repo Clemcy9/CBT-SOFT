@@ -5,14 +5,35 @@
         <h2>
             Create Quiz by Topic
         </h2>
-        <form enctype="multipart/form-data" method="post" action="{% url 'file_processing:question_upload' %}">
+        <form enctype="application/x-www-form-urlencoded" method="post" action="{% url 'file_processing:question_upload' %}">
             <!-- <input type="text" hidden name="user" value="{{user}}"> -->
             <table style="width: 100%; border-spacing: 3px;">
                 {% csrf_token %}
                 {% for field in form %}
                     {% if field == form.topic %}
-                        <h4>this is topic</h4>
-                        {{field}}
+                        <tr>
+                            <td style="padding: .3em;">Topic1 :</td>
+                            <td>
+                                <select name="topic" required="" id="id_topic" onchange="alert(['value changed to',this.value])">
+                                    <option value="" selected="">---------</option>
+                                
+                                    <option value="1">Jesus life</option>
+                                
+                                    <option value="2">Variation</option>
+                                
+                                    <option value="3">Quadratic Equation</option>
+                                
+                                    <option value="4">Simple Equation</option>
+                                
+                                    <option value="5">Variation</option>
+                                
+                                    <option value="6">Quadratic Equation</option>
+                                
+                                    <option value="7">Simple Equation</option>
+                            
+                                </select>
+                            </td>
+                        </tr>
                     {% else %}
                         <tr>
                             <td style="padding: .3em;">{{field.label_tag}} </td>
@@ -26,7 +47,8 @@
 
                         </tr>
                     {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                    
                     <tr>
                         {% for message in messages %}
                         <p style="background-color:rgba(233, 73, 97, 0.641); text-align: center; padding: .2em; font-size: small;">{{message|upper}}</p>
@@ -42,6 +64,17 @@
         </form>
     </div>
 </div>
+
+<script>
+    let topic = document.getElementById('id_topic')
+    let course = document.getElementById('id_course')
+
+    function my_topics(course_id){
+
+    }
+
+    // course.addEventListener('onclick',alert('option just changed'))
+</script>
 
 
 {% endblock %}

@@ -81,7 +81,7 @@
         function updateDb(){
             // let data = {'time':timeLeft, 'sitting': {{sitting.id}} }
             setInterval(function(){
-                makeRequest("{% url 'cbt_app:time_update' sitting.quiz.id %}",'post',{'time':timeLeft/60, 'sitting': {{sitting.id}} })
+                makeRequest("{% url 'cbt_app:time_update' sitting.quiz.id %}",'post',{'time':timeLeft, 'sitting': {{sitting.id}} })
             }, 6000)
         }
     document.addEventListener(onload,countDown())

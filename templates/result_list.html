@@ -56,17 +56,16 @@
             <tr>
                 <th>Student Name</th>
                 <th>Score</th>
-                <th>Start</th>
-                <th>End</th>
+                <th>Duration</th>
+                <!-- <th>End</th> -->
 
             </tr>
             {% for x,y in quiz_pair.items %}
             <tr>
                 
                 <td><a href="#">{{x.user.last_name|capitalize }} {{x.user.first_name|capitalize }}</a></td>
-                <td>{{y}}</td>
-                <td>{{x.start_time}}</td>
-                <td>{{x.end_time}}</td>
+                <td>{{y}}/{{quiz_total_question}}</td>
+                <td>{{x.duration}}</td>
             </tr>
             {% endfor %}
         </table>

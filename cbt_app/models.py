@@ -78,10 +78,10 @@ class Choice(models.Model):
 # model to store respective quiz(exams)
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
-    examiner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    questions = models.ManyToManyField(Question)
-    course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True)
-    level = models.ForeignKey(Level, on_delete=models.CASCADE,null=True)
+    examiner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+    questions = models.ManyToManyField(Question,)
+    course = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, null=True)
+    level = models.ForeignKey(Level, on_delete=models.DO_NOTHING,null=True)
     is_available = models.BooleanField(default=True)
 
     # features of quiz
@@ -225,9 +225,16 @@ class Sitting(models.Model):
             self.question_unattempted = ','.join(map(str,minus_first_10_int))
             self.save()
     
+    def update_duration(self, new_value):
+        self.minute = (new_value % 3600) // 60
+        self.duration = self.minute
+        self.save()
+
     def sitting_complete(self):
         self.is_completed=True
         self.end_time = now()
+        self.time = self.end_time - self.start_time
+        self.update_duration(self.time.total_seconds())
         self.save()
     
     def record_attempt(self,quest,quest_choice):
@@ -268,12 +275,10 @@ class Sitting(models.Model):
         total_quest = len(all_quest)
         total_points = self.current_score
         percent_score = (total_points/total_quest)*100
-        return round(percent_score,2)
+        # return round(percent_score,2)
+        return round(total_points,2)
 
-    def update_duration(self, new_value):
-        self.duration = new_value
-        self.save()
-
+    
 class UserGuess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
     quiz = models.ForeignKey(Quiz,null=True, on_delete=models.DO_NOTHING)
