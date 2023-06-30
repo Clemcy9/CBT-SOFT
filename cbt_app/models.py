@@ -186,6 +186,7 @@ class Sitting(models.Model):
     start_time =models.DateTimeField(auto_now_add=True)
     end_time =models.DateTimeField(null=True, blank=True)
     duration = models.FloatField(help_text='duration in minutes', default=0)
+    time_left = models.FloatField(help_text='duration in minutes', default=0)
     
     objects = models.Manager()
     sits = SittingManager()
@@ -226,15 +227,23 @@ class Sitting(models.Model):
             self.save()
     
     def update_duration(self, new_value):
-        self.duration = new_value
+        self.duration = self.quiz.duration - new_value
         self.save()
+
+
+    def update_time_left(self, new_value):
+        self.time_left = new_value
+        self.save()
+        self.update_duration(self.time_left)
+    
+    
 
     def sitting_complete(self):
         self.is_completed=True
         self.end_time = now()
         self.time = self.end_time - self.start_time
         self.minute = (self.time.total_seconds() % 3600) // 60
-        self.update_duration(self.minute)
+        self.update_time_left(self.minute)
         self.save()
     
     def record_attempt(self,quest,quest_choice):

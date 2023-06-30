@@ -52,12 +52,12 @@ def take_quiz(request,quiz_id):
     sitting = Sitting.sits.check_sitting(request.user,quiz)
     if sitting:
         questions = sitting.get_questions_in_10s().order_by('?')
-        duration =sitting.duration
-        print(f'this is duration {duration}, main id is {sitting.id}')
+        time_left =sitting.time_left
+        print(f'this is time_left {time_left}, main id is {sitting.id}')
         context={
             'questions':questions,
             'sitting':sitting,
-            'duration':duration or sitting.quiz.duration
+            'time_left':time_left or sitting.quiz.duration
         }
         print(f'this is form {questions}')
         return render(request, 'quiz.html',context)
@@ -72,8 +72,8 @@ def update_timeleft(request, quiz_id):
         print(f'post data is {data}')
         userSitting = Sitting.objects.get(id=data['sitting'])
         time_in_min = round(float(data['time'])/60,2)
-        userSitting.update_duration(time_in_min)
-        print(f'time left now is {userSitting.duration}, id is {userSitting.id}')
+        userSitting.update_time_left(time_in_min)
+        print(f'time left now is {userSitting.time_left}, id is {userSitting.id}')
         return HttpResponse('updated time')
 
 @login_required
