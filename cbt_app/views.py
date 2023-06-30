@@ -71,7 +71,8 @@ def update_timeleft(request, quiz_id):
         data = json.loads(request.body)
         print(f'post data is {data}')
         userSitting = Sitting.objects.get(id=data['sitting'])
-        userSitting.update_duration( new_value=float(data['time']))
+        time_in_min = round(float(data['time'])/60,2)
+        userSitting.update_duration(time_in_min)
         print(f'time left now is {userSitting.duration}, id is {userSitting.id}')
         return HttpResponse('updated time')
 

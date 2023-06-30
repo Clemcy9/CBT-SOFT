@@ -226,15 +226,15 @@ class Sitting(models.Model):
             self.save()
     
     def update_duration(self, new_value):
-        self.minute = (new_value % 3600) // 60
-        self.duration = self.minute
+        self.duration = new_value
         self.save()
 
     def sitting_complete(self):
         self.is_completed=True
         self.end_time = now()
         self.time = self.end_time - self.start_time
-        self.update_duration(self.time.total_seconds())
+        self.minute = (self.time.total_seconds() % 3600) // 60
+        self.update_duration(self.minute)
         self.save()
     
     def record_attempt(self,quest,quest_choice):

@@ -55,7 +55,7 @@
         const timeLeftmin = document.querySelector('#time-left-min');
         const timeLeftsec = document.querySelector('#time-left-secs');
         const submit = document.querySelector('#submit');
-        let timeLeft = {{duration}} *60 ;
+        let timeLeft = {{duration}} *60 ; //convert min to secs
         let min = 0;
         let secs = 0;
 
@@ -70,8 +70,8 @@
                 }
                 timeLeft--;
                 // let post =
-                min = Math.floor(timeLeft/60)
-                secs= Math.round(((timeLeft/60)-min)*60)
+                min = Math.floor(timeLeft/60) // minute only half of the countdown
+                secs= Math.round(((timeLeft/60)-min)*60) // seconds only half of the countdown
                 timeLeftmin.innerHTML = min
                 timeLeftsec.innerHTML = secs
             }, 1000)
@@ -80,8 +80,14 @@
         }
         function updateDb(){
             // let data = {'time':timeLeft, 'sitting': {{sitting.id}} }
-            setInterval(function(){
-                makeRequest("{% url 'cbt_app:time_update' sitting.quiz.id %}",'post',{'time':timeLeft, 'sitting': {{sitting.id}} })
+            setInterval(function()
+            {
+                makeRequest(
+                    "{% url 'cbt_app:time_update' sitting.quiz.id %}",
+                    'post',
+                    {'time':timeLeft, 
+                    'sitting': {{sitting.id}} }
+                )
             }, 6000)
         }
     document.addEventListener(onload,countDown())
