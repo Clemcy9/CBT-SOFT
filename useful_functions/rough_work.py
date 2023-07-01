@@ -184,3 +184,35 @@ def xl2db(url,course,title):
             </tr>
             {% endfor %}
 """
+
+# used to update duration in db through cmd
+"""
+for x in s: 
+        try:                                            
+            t = x.end_time - x.start_time
+            t1 = t.total_seconds() / 60
+            x.duration = round(t1,2)
+            x.save()
+            print(f'updated succesfully, duration = {x.duration}')
+        except:
+            print('endtime or start time null')
+            continue
+"""
+
+#  update countdown time to db using event listener at regualar interval
+"""
+ function updateDb(){
+            let data = {'time':timeLeft, 'sitting': {{sitting.id}} }
+            setInterval(function()
+            {
+                makeRequest(
+                    "{% url 'cbt_app:time_update' sitting.quiz.id %}",
+                    'post',
+                    {'time':timeLeft, 
+                    'sitting': {{sitting.id}} }
+                )
+            }, 6000)
+        }
+
+        document.addEventListener(onload,updateDb())
+"""

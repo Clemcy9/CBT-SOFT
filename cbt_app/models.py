@@ -226,8 +226,8 @@ class Sitting(models.Model):
             self.question_unattempted = ','.join(map(str,minus_first_10_int))
             self.save()
     
-    def update_duration(self, new_value):
-        self.duration = self.quiz.duration - new_value
+    def update_duration(self, timeLeft):
+        self.duration = self.quiz.duration - timeLeft
         self.save()
 
 
@@ -242,8 +242,8 @@ class Sitting(models.Model):
         self.is_completed=True
         self.end_time = now()
         self.time = self.end_time - self.start_time
-        self.minute = (self.time.total_seconds() % 3600) // 60
-        self.update_time_left(self.minute)
+        self.minute = (self.time.total_seconds() % 3600) / 60
+        self.duration = round(self.minute,2)
         self.save()
     
     def record_attempt(self,quest,quest_choice):

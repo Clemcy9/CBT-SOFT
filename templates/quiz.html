@@ -24,7 +24,7 @@
                 {% endfor %}
             </fieldset>
         {% endfor %}
-        <input type="submit" value="Next" style="margin-top: 2em;" id="submit">
+        <input type="submit" value="Next" style="margin-top: 2em;" id="submit" onclick="updateDbTime()">
     </form>
 </div>
 <script>
@@ -78,19 +78,16 @@
 
             
         }
-        function updateDb(){
-            // let data = {'time':timeLeft, 'sitting': {{sitting.id}} }
-            setInterval(function()
-            {
-                makeRequest(
-                    "{% url 'cbt_app:time_update' sitting.quiz.id %}",
-                    'post',
-                    {'time':timeLeft, 
-                    'sitting': {{sitting.id}} }
-                )
-            }, 6000)
+        function updateDbTime(){
+            makeRequest(
+                "{% url 'cbt_app:time_update' sitting.quiz.id %}",
+                'post',
+                {'time':timeLeft, 
+                'sitting': {{sitting.id}} }
+            )
+            alert(['time left is =',timeleft])
         }
     document.addEventListener(onload,countDown())
-    document.addEventListener(onload,updateDb())
+    
 </script>
 {% endblock %}
