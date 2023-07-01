@@ -8,6 +8,7 @@
     <form action="{% url 'cbt_app:quiz_progress' %}" method="post">
         {% csrf_token %}
         <input type="hidden" value="{{sitting.id}}" name="sitting">
+        
         {% for question in questions %}
             <legend>
                 <h3>{{forloop.counter}}. {{question.content}}</h3>
@@ -83,7 +84,7 @@
                 "{% url 'cbt_app:time_update' sitting.quiz.id %}",
                 'post',
                 {'time':timeLeft, 
-                'sitting': {{sitting.id}} }
+                'sitting': {{sitting.id}}, }
             )
             alert(['time left is =',timeleft])
         }

@@ -57,6 +57,7 @@ def take_quiz(request,quiz_id):
         context={
             'questions':questions,
             'sitting':sitting,
+            'quiz':quiz,
             'time_left':time_left or sitting.quiz.duration
         }
         print(f'this is form {questions}')
@@ -73,6 +74,7 @@ def quiz_progress(request):
         sitting_id = questions['sitting'][0]
         # print(f'sitting id is {sitting_id} and type is {type(sitting_id)}')
         sitting = Sitting.objects.get(id=int(sitting_id))
+        
         print(f'found sitting is {sitting}')
         if sitting:
             question_pair,question_list =question_choice_pair(questions)
@@ -87,9 +89,9 @@ def quiz_progress(request):
             if (not sitting.question_unattempted) or sitting.time_left <= 0.08: #less than 5secs
                 sitting.sitting_complete()
                 messages.info(request, f'Quiz completed, your result is {sitting.get_score()}')
-                return HttpResponseRedirect(reverse('cbt_app:dashboard'))
+                return redirect(reverse('cbt_app:dashboard'))
             else:
-                return(redirect(reverse('cbt_app:take_quiz',args=[sitting.quiz.id])))
+                return redirect(reverse('cbt_app:take_quiz',args=[sitting.quiz.id]))
         else:
             return HttpResponse('You have completed this quiz b4')
         
