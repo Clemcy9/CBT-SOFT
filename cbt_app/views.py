@@ -64,18 +64,6 @@ def take_quiz(request,quiz_id):
     else:
         return HttpResponse("You've already taken test")
 
-def update_timeleft(request, quiz_id):
-    if request.method == 'POST':
-        # userSitting = Sitting.objects.filter(user =request.user, quiz__id =quiz_id )[0]
-        # data = (bytes.decode(request.body,"utf-8"))
-        data = json.loads(request.body)
-        print(f'post data is {data}')
-        userSitting = Sitting.objects.get(id=data['sitting'])
-        time_in_min = round(float(data['time'])/60,2) #convert from secs to min
-        userSitting.update_time_left(time_in_min)
-        print(f'time left now is {userSitting.time_left}, id is {userSitting.id}')
-        return HttpResponse('updated time')
-
 @login_required
 def quiz_progress(request):
     if request.method == 'POST':
@@ -96,7 +84,7 @@ def quiz_progress(request):
             sitting.record_attempt(question_list, question_pair)
             sitting.remove_question_in_10s()
             # check if completed quiz
-            if not sitting.question_unattempted:
+            if (not sitting.question_unattempted) or sitting.time_left <= 0.08: #less than 5secs
                 sitting.sitting_complete()
                 messages.info(request, f'Quiz completed, your result is {sitting.get_score()}')
                 return HttpResponseRedirect(reverse('cbt_app:dashboard'))
@@ -121,6 +109,19 @@ def api_all_question(request):
     json_data = serializers.serialize('json',choice)
     # return JsonResponse(json_data,safe=False)
     return HttpResponse(json_data)
+
+def update_timeleft(request, quiz_id):
+    if request.method == 'POST':
+        # userSitting = Sitting.objects.filter(user =request.user, quiz__id =quiz_id )[0]
+        # data = (bytes.decode(request.body,"utf-8"))
+        data = json.loads(request.body)
+        print(f'post data is {data}')
+        userSitting = Sitting.objects.get(id=data['sitting'])
+        time_in_min = round(float(data['time'])/60,2) #convert from secs to min
+        userSitting.update_time_left(time_in_min)
+        print(f'time left now is {userSitting.time_left}, id is {userSitting.id}')
+        return HttpResponse('updated time')
+
 
 def api_edit_quiz(request):
     if request.method == 'POST':
