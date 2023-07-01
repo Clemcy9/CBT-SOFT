@@ -24,12 +24,16 @@
 
             </tr>
             {% for quiz in contents %}
-            <tr>
-                <td><a href="{% url 'cbt_app:take_quiz' quiz.id %}">{{quiz}}</a></td>
-                <td>{{quiz.course}}</td>
-                <td>{{quiz.level}}</td>
-                <td>{{quiz.duration}}</td>
-            </tr>
+                <!-- show only active quiz -->
+                {% if quiz.is_available %}
+                    <tr>
+                        <td><a href="{% url 'cbt_app:take_quiz' quiz.id %}">{{quiz}}</a></td>
+                        <td>{{quiz.course}}</td>
+                        <td>{{quiz.level}}</td>
+                        <td>{{quiz.duration}}</td>
+                    </tr>
+                {% endif %}
+            
             {% endfor %}
         </table>
     </div>

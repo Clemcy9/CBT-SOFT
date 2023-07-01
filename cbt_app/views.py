@@ -39,7 +39,7 @@ def dashboard(request):
         return render(request, 'dashboard.html', context)
         
 
-    contents = Quiz.objects.all()
+    contents = Quiz.objects.filter(course__in =request.user.profile.courses.all())
     context = {
         'contents':contents,
     }
