@@ -122,6 +122,15 @@ def api_all_question(request):
     # return JsonResponse(json_data,safe=False)
     return HttpResponse(json_data)
 
+def api_edit_quiz(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(f'data from dashboard post = {data}\ntype={type(data["is_active"])}')
+        quiz = Quiz.objects.get(id=int(data['quiz_id']))
+        quiz.is_available = (data['is_active'].strip(''))
+        quiz.save()
+        return HttpResponse('ok')
+    
 @login_required
 def result_list(request,quiz_id):
     user = request.user

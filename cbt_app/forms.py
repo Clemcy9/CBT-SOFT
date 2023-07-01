@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserGuess, Choice
+from .models import UserGuess, Choice, Quiz
 from django.forms.widgets import RadioSelect
 
 
@@ -40,3 +40,9 @@ class QuestionForm(forms.Form):
         self.fields['question'] = forms.CharField(max_length=300)
         self.fields['choice'] = forms.ChoiceField(choices=choice_list,widget=RadioSelect)
         
+
+# dashboard quiz isactive form
+class DashboadQuizUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Quiz
+        fields =['is_available']
