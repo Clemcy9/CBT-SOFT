@@ -22,6 +22,7 @@ urlpatterns = [
     path('quiz/', include('cbt_app.urls')),
     path('auth1/',include('auth1.urls')),
     path('files/',include('file_processing.urls')),
+    path('paginated/',include('paginated_quiz.urls')),
     path('create_quiz/',include('create_quiz.urls')),
     path('', view=RedirectView.as_view(url='auth1/login'))
     

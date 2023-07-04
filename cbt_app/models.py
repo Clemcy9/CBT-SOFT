@@ -148,6 +148,9 @@ class SittingManager(models.Manager):
         if quiz.single_attempt and self.filter(user=user,quiz=quiz,is_completed=True):
             return False
         
+        # check time left
+        # if quiz.time_left <=0:
+        #     return False
         # check for uncompleted quiz instance to resume, else create new one
         try:
             sitting = self.get(user=user, quiz=quiz, is_completed =False)
@@ -248,6 +251,10 @@ class Sitting(models.Model):
     
     def record_attempt(self,quest,quest_choice):
         # attempted question list
+
+        # check sitting before recording attempt
+        
+
         # get previous attempt_question, extend it with new quest
         previous_attempt =self.question_attempted.split(',')
         if previous_attempt and previous_attempt != ['']:
@@ -274,7 +281,8 @@ class Sitting(models.Model):
         # sum all choice with is_answer == true, store result in dict correct
         # models.functions.cast does type casting of boolean to int that it might be working in postgresql
         correct= c.aggregate(count = models.Sum(models.functions.Cast('is_answer',models.IntegerField())))
-        self.current_score = correct['count']
+        #  currentscore = 0 just incase the user didnt choose any option all through i.e null choices
+        self.current_score = correct['count'] or 0 
     
         self.end_time = now()
         self.save()
