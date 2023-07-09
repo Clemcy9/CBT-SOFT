@@ -6,7 +6,7 @@ from cbt_app.models import Courses, Topic
 class CreateByTopicForm(forms.Form):
     title = forms.CharField(max_length=100, help_text='name of the quiz')
     course = forms.ModelChoiceField(queryset=Courses.objects.all())
-    topic = forms.ModelChoiceField(queryset=Topic.objects.all())
+    topic = forms.ModelChoiceField(queryset=Topic.objects.none())
     max_no_question = forms.IntegerField()
     duration = forms.FloatField(help_text='enter duration in minutes', required=True,)
     activate = forms.BooleanField(required=False)

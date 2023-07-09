@@ -1,8 +1,12 @@
 from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.core import serializers
 from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
 from .forms import CreateByTopicForm
-from cbt_app.models import UploadTitle, Question, Quiz
+import json
+from cbt_app.models import UploadTitle, Question, Quiz, Choice, Topic, Courses
 
 # Create your views here.
 
@@ -79,7 +83,7 @@ def create_quiz_by_topic(request):
             return HttpResponseRedirect(reverse('cbt_app:dashboard'))
         else:
             messages.error(request,'something went wrong')
-            return render(request, template_name,{'form':form})
+            return render(request, 'create_quiz_by_topic.html',{'form':form})
 
     form = CreateByTopicForm(user=request.user)
     return render(request, 'create_quiz_by_topic.html',{'form':form})
@@ -88,3 +92,17 @@ def create_quiz_by_topic(request):
 
 def create_quiz_by_random(title):
     pass
+
+@csrf_exempt
+def get_topics(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body)
+        course_id = json_data['course_id']
+        print(f'type of jdata:{type(json_data)}\course id:{course_id}')
+        # data = serializers.deserialize()
+        return JsonResponse('data received',safe=False)
+
+    question = Question.objects.all().order_by('?')
+    choice = Choice.objects.all()
+    json_data = serializers.serialize('json',choice)
+    # return JsonResponse(json_data,safe=False)

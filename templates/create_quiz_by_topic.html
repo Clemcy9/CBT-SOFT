@@ -14,8 +14,8 @@
                         <tr>
                             <td style="padding: .3em;">Topic1 :</td>
                             <td>
-                                <select name="topic" required="" id="id_topic" onchange="alert(['value changed to',this.value])">
-                                    <option value="" selected="">---------</option>
+                                <select name="topic" required="" id="id_topic" onchange="my_topics('halleluyah')">
+                                    <option value="" selected>---------</option>
                                 
                                     <option value="1">Jesus life</option>
                                 
@@ -66,11 +66,45 @@
 </div>
 
 <script>
+
+    // fetch post and get request
+    async function makeRequest(url, method, data){
+        let headers ={
+            'X-Requested-With':'XMLHttpRequest',
+            'Content-Type':'application/json'
+        }
+
+        if(method == 'post'){
+            const csrf = document.querySelector('[name = csrfmiddlewaretoken]').value
+            headers['X-CSRFToken'] = csrf
+        }
+
+        let response = await fetch(url,{
+            method:method,
+            headers:headers,
+            body:JSON.stringify(data)
+        })
+
+        res = await response.json();
+        // alert(['feedback is:',res])
+        return res
+        
+    } 
+
     let topic = document.getElementById('id_topic')
     let course = document.getElementById('id_course')
 
+    let all_topics
     function my_topics(course_id){
-
+        makeRequest(
+                "{% url 'create_quiz:get_topics' %}",
+                'post',
+                {
+                    'course_id':course_id, 
+                }
+            ).then(
+                x=>all_topics = x)
+            alert(['topics are =',all_topics])
     }
 
     // course.addEventListener('onclick',alert('option just changed'))
