@@ -86,7 +86,7 @@ def quiz_progress(request):
             sitting.record_attempt(question_list, question_pair)
             sitting.remove_question_in_10s()
             # check if completed quiz
-            if (not sitting.question_unattempted) or sitting.time_left <= 0.08: #less than 5secs
+            if (not sitting.question_unattempted): #or sitting.time_left <= 0.08: #less than 5secs
                 sitting.sitting_complete()
                 messages.info(request, f'Quiz completed, your result is {sitting.get_score()}')
                 return redirect(reverse('cbt_app:dashboard'))
@@ -116,6 +116,7 @@ def update_timeleft(request, quiz_id):
     if request.method == 'POST':
         # userSitting = Sitting.objects.filter(user =request.user, quiz__id =quiz_id )[0]
         # data = (bytes.decode(request.body,"utf-8"))
+        print(f'request.post is ={request.POST}')
         data = json.loads(request.body)
         print(f'post data is {data}')
         userSitting = Sitting.objects.get(id=data['sitting'])
@@ -127,11 +128,14 @@ def update_timeleft(request, quiz_id):
 
 def api_edit_quiz(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        print(f'data from dashboard post = {data}\ntype={type(data["is_active"])}')
-        quiz = Quiz.objects.get(id=int(data['quiz_id']))
-        quiz.is_available = (data['is_active'].strip(''))
+        print(f'request.post is ={request.POST["is_active"]}')
+        
+        # data = json.loads(request.body)
+        # print(f'data from dashboard post = {data}\ntype={type(data["is_active"])}')
+        quiz = Quiz.objects.get(id=request.POST['quiz_id'])
+        quiz.is_available = (request.POST['is_active'])
         quiz.save()
+        
         return HttpResponse('ok')
     
 @login_required

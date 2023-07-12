@@ -103,11 +103,11 @@
 // fetch post and get request
     async function makeRequest(url, method, data){
         let headers ={
-            'X-Requested-With':'XMLHttpRequest',
-            'Content-Type':'application/text'
+            // 'X-Requested-With':'XMLHttpRequest',
+            // 'Content-Type':'multipart/form-data'
         }
 
-        if(method == 'post'){
+        if(method == "POST"){
             const csrf = document.querySelector('[name = csrfmiddlewaretoken]').value
             headers['X-CSRFToken'] = csrf
         }
@@ -115,20 +115,21 @@
         let response = await fetch(url,{
             method:method,
             headers:headers,
-            body:JSON.stringify(data)
+            body:data
         })
 
         return await response.status
     } 
 
     function updateDb(x,y){
+        // create new form instance
+        const formData = new FormData()
+        formData.append('quiz_id',x)
+        formData.append('is_active',y)
             makeRequest(
                 "{% url 'cbt_app:api_edit_quiz' %}",
-                'post',
-                {
-                    'quiz_id':x, 
-                    'is_active':y 
-                }
+                "POST",
+                formData
             )
             // alert(['making request data =',x,y])
         }

@@ -14,7 +14,7 @@
                         <tr>
                             <td style="padding: .3em;">Topic1 :</td>
                             <td>
-                                <select name="topic" required="" id="id_topic" onchange="my_topics('halleluyah')">
+                                <select name="topic" required="" id="id_topic" onchange="my_topics()">
                                     <option value="" selected>---------</option>
                                 
                                     <option value="1">Jesus life</option>
@@ -93,14 +93,16 @@
 
     let topic = document.getElementById('id_topic')
     let course = document.getElementById('id_course')
+    
 
     let all_topics
-    function my_topics(course_id){
+    function my_topics(){
+        let c_id = course.value
         makeRequest(
                 "{% url 'create_quiz:get_topics' %}",
                 'post',
                 {
-                    'course_id':course_id, 
+                    'course_id':c_id, 
                 }
             ).then(
                 x=>all_topics = x)
