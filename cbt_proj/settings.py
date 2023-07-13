@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'auth1',
     'file_processing',
     'ckeditor',
+    'paginated_quiz',
 ]
 
 MIDDLEWARE = [

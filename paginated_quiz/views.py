@@ -8,7 +8,7 @@ from .forms import QuestionChoiceForm
 # Create your views here.
 
 # just form
-def take_quiz_form(request):
+def form_quiz(request):
     # query set
     question = Question.objects.get(id =19)
     if request.method == 'POST':
@@ -19,7 +19,7 @@ def take_quiz_form(request):
     return render(request, 'justform.html',{'form':form})
 
 # paginate
-def take_quiz_paginate(request):
+def paginator_quiz(request):
     questions = Question.objects.all()[:30]
     quest_choice_pair = {x:x.choice_set.all() for x in questions}
     paginator = Paginator(questions, 5)
@@ -31,7 +31,7 @@ def take_quiz_paginate(request):
 
 
 # paginate with formset
-def take_quiz_formset(request):
+def formset_quiz(request):
     # queryset
     questions = Question.objects.all()[:30]
     quest_choice_pair = {x:x.choice_set.all() for x in questions}
@@ -45,3 +45,6 @@ def take_quiz_formset(request):
     formset = formset_factory(QuestionChoiceForm())
     formset
     return render(request, 'paginated_quiz.html', {'page_obj': page_obj})
+
+def jscript_quiz(request):
+    return render(request,'paginated_jscript.html')
