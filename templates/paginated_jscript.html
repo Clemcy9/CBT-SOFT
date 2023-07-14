@@ -8,8 +8,18 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>testing static files</h3>
+    <h3>testing static fileswss</h3>
     <img src="{% static 'my_app/example.jpg' %}" alt="My image">
-    <script src=" {% static 'static_files/main.js' %} "></script>
+    <!-- <script type="module">
+        import send_data from "../static/static_files/main.js"
+        send_data()
+    </script> -->
+
+    <script>
+        all_questions = [{{questions}}]
+        document.createElement('select')
+        
+        console.log(all_questions)
+    </script>
 </body>
 </html>

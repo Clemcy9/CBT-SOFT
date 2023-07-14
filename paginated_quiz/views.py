@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.forms.formsets import formset_factory
 from cbt_app.models import Quiz, Sitting, Question, Courses, Level
@@ -47,4 +48,6 @@ def formset_quiz(request):
     return render(request, 'paginated_quiz.html', {'page_obj': page_obj})
 
 def jscript_quiz(request):
-    return render(request,'paginated_jscript.html')
+    questions = Question.objects.all()[:20]
+    return JsonResponse({'questions':questions})
+    # return render(request,'paginated_jscript.html',{'questions':questions})
