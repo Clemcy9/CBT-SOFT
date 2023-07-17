@@ -3,7 +3,7 @@ export function send_data(){
 }
 // fetch post and get request
 export async function makeRequest(url, method, data){
-    alert('loaded js successfully')
+    let response = {}
     let headers ={
         // 'X-Requested-With':'XMLHttpRequest',
         // 'Content-Type':'multipart/form-data'
@@ -12,15 +12,17 @@ export async function makeRequest(url, method, data){
     if(method == "POST"){
         const csrf = document.querySelector('[name = csrfmiddlewaretoken]').value
         headers['X-CSRFToken'] = csrf
+        response= await fetch(url,{
+           method:method,
+           headers:headers,
+           body:data
+        })
+    }
+    else{
+        response= await fetch(url)
     }
 
-    let response = await fetch(url,{
-        method:method,
-        headers:headers,
-        body:data
-    })
-
-    return await response.json()
+    return response.json()
 } 
 
 // export default send_data

@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.forms.formsets import formset_factory
+from django.core import serializers
 from cbt_app.models import Quiz, Sitting, Question, Courses, Level
 from auth1.models import User, Profile
 from .forms import QuestionChoiceForm
@@ -48,6 +49,17 @@ def formset_quiz(request):
     return render(request, 'paginated_quiz.html', {'page_obj': page_obj})
 
 def jscript_quiz(request):
-    questions = Question.objects.all()[:20]
-    return JsonResponse({'questions':questions})
-    # return render(request,'paginated_jscript.html',{'questions':questions})
+    
+    return render(request,'paginated_jscript.html')
+
+def get_questions(request):
+    questions_db = Question.objects.all()[:20]
+    questions = []
+    for q in questions_db:
+        answer =[]
+        for a in q.choice_set.all():
+            answer.append(a.content)
+        questions.append({q.content:answer})
+    # json_data = serializers.serialize('json',questions)
+    # print(f'question and choice are {questions}')
+    return JsonResponse({'questions':questions}, safe=False)

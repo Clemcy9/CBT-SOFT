@@ -1,0 +1,1 @@
+Syntactic sugar is a term used to describe syntax within programming languages that makes things easier to read or understand. It does not add new functionality, but rather provides an easier way to perform existing tasks. Examples of syntactic sugar include optional parameters in functions, operator overloading, and type inference.

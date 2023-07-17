@@ -10,16 +10,66 @@
 <body>
     <h3>testing static fileswss</h3>
     <img src="{% static 'my_app/example.jpg' %}" alt="My image">
-    <!-- <script type="module">
-        import send_data from "../static/static_files/main.js"
-        send_data()
-    </script> -->
-
-    <script>
-        all_questions = [{{questions}}]
-        document.createElement('select')
+    <div>
+        <div id="quix_box">
+        </div>
+        <button id="next">next</button>
+    </div>
+    <script type="module">
+        import {makeRequest} from "{% static 'static_files/main.js' %}"
         
-        console.log(all_questions)
+        let quizbox = document.querySelector("#quiz_box")
+
+        let all_questions = []
+        all_questions.push(await makeRequest("{% url 'paginated_quiz:get_questions' %}",'get'))
+
+        // console.log(all_questions)
+        /*
+        quizBox.innerHTML += `
+                    <hr class="ques" style="display:none">
+                    <div class="mb-2 ques" style="display:none">
+                        <b>${question}</b>
+                    </div>
+                `
+                $('.start-button').click(function () {
+            $(".ques").show();
+        });
+                    answers.forEach(answer=>{
+                    quizBox.innerHTML += `
+                        <div>
+                            <input type="radio" class="ans" style="display:none" id="${question}-${answer}" name="${question}" value="${answer}">
+                            <label for="${question}" style="display:none" class="answer">${answer}</label>
+                        </div>
+                
+                        `
+                        */        
+        all_questions['questions'].forEach(x =>{
+            for (const [question,answer] of Object.entries(x)){
+                // console.log('question= ',a)
+                quizBox.innerHTML += `
+                    <hr class="ques" style="display:none">
+                    <div class="mb-2 ques" style="display:none">
+                        <b>${question}</b>
+                    </div>
+                `
+                for( let y of answer){
+                    // console.log('answer= ',y)
+                    quizBox.innerHTML += `
+                        <div>
+                            <input type="radio" class="ans" style="display:none" id="${question}-${answer}" name="${question}" value="${answer}">
+                            <label for="${question}" style="display:none" class="answer">${answer}</label>
+                        </div>
+                
+                        `
+                }
+                
+            }           
+        })
+
+        
+
+        window.send_data = send_data
+        // window.console.log(all_questions)
     </script>
 </body>
 </html>
