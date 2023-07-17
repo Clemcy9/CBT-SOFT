@@ -54,6 +54,7 @@ def jscript_quiz(request):
 
 def get_questions(request):
     questions_db = Question.objects.all()[:20]
+    
     questions = []
     for q in questions_db:
         answer =[]
