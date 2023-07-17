@@ -10,54 +10,99 @@
 <body>
     <h3>testing static fileswss</h3>
     <img src="{% static 'my_app/example.jpg' %}" alt="My image">
-    <div>
-        <div id="quix_box">
+    <form action="#">
+        <div>
+            <div id="quiz_box">
+            </div>
+            <button id="next" onclick="display_question(0,1)">next</button>
+            <button id="prev" onclick="display_question(0,2)">prev</button>
         </div>
-        <button id="next">next</button>
-    </div>
+    </form>
+    
     <script type="module">
         import {makeRequest} from "{% static 'static_files/main.js' %}"
         
-        let quizbox = document.querySelector("#quiz_box")
+        let quizBox = document.querySelector("#quiz_box")
+        // all question_options pair array from db
+        let all_questions_db = await makeRequest("{% url 'paginated_quiz:get_questions' %}",'get')
+        // actual cleaned questions
+        let all_questions = all_questions_db['questions']
+        // variable to count nos of question and use as page nos
+        let pages = all_questions.length
+        console.log('pages =',pages)
+        // variable for user response
+        let user_question_choice = {}
+        // array for all user response
+        let user_response = []
 
-        let all_questions = []
-        all_questions.push(await makeRequest("{% url 'paginated_quiz:get_questions' %}",'get'))
-
-        // console.log(all_questions)
-        /*
-        quizBox.innerHTML += `
-                    <hr class="ques" style="display:none">
-                    <div class="mb-2 ques" style="display:none">
+        // function that take question num and renders question-options on screeen
+        let counter = -1
+        function display_question(quest_num=0, state){
+            // there are 3 states; 0=default, 1=next,two=prev
+            switch (state) {
+                case 0:
+                    // quest_num++
+                    break;
+                case 1:
+                    if(counter<pages-1){
+                        counter++
+                    }else{
+                        counter= pages-1
+                    }
+                    // console.log(`counter in switch is ${counter}`)
+                    break;
+                case 2:
+                    if(counter<1){
+                        counter=0
+                    }else{
+                        counter--
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
+            console.log(`state is ${state}`)
+            console.log(`counter is ${counter}`)
+            for (const [question,options] of Object.entries(all_questions[counter || quest_num])){
+                console.log('question= ',question)
+                quizBox.innerHTML = `
+                    <hr class="ques" >
+                    <div class="mb-2 ques" >
                         <b>${question}</b>
                     </div>
                 `
-                $('.start-button').click(function () {
-            $(".ques").show();
-        });
-                    answers.forEach(answer=>{
+                for (const option of options){
                     quizBox.innerHTML += `
                         <div>
-                            <input type="radio" class="ans" style="display:none" id="${question}-${answer}" name="${question}" value="${answer}">
-                            <label for="${question}" style="display:none" class="answer">${answer}</label>
+                            <input type="radio" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
+                            <label for="${question}"  class="answer">${option}</label>
                         </div>
                 
                         `
-                        */        
+                }
+            }
+            
+        }
+
+        window.display_question = display_question
+
+        /*
         all_questions['questions'].forEach(x =>{
-            for (const [question,answer] of Object.entries(x)){
-                // console.log('question= ',a)
+            for (const [question,answers] of Object.entries(x)){
+                console.log('question= ',question)
                 quizBox.innerHTML += `
-                    <hr class="ques" style="display:none">
-                    <div class="mb-2 ques" style="display:none">
+                    <hr class="ques" >
+                    <div class="mb-2 ques" >
                         <b>${question}</b>
                     </div>
                 `
-                for( let y of answer){
-                    // console.log('answer= ',y)
+                for( let answer of answers){
+                    console.log('answer= ',answer)
                     quizBox.innerHTML += `
                         <div>
-                            <input type="radio" class="ans" style="display:none" id="${question}-${answer}" name="${question}" value="${answer}">
-                            <label for="${question}" style="display:none" class="answer">${answer}</label>
+                            <input type="radio" class="ans"  id="${question}-${answer}" name="${question}" value="${answer}">
+                            <label for="${question}"  class="answer">${answer}</label>
                         </div>
                 
                         `
@@ -65,11 +110,12 @@
                 
             }           
         })
+        */
 
         
+        window.console.log(all_questions)
 
-        window.send_data = send_data
-        // window.console.log(all_questions)
+        // window.send_data = send_data
     </script>
 </body>
 </html>
