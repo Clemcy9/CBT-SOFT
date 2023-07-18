@@ -216,3 +216,55 @@ for x in s:
 
         document.addEventListener(onload,updateDb())
 """
+
+"""
+ // function that take question num and renders question-options on screeen
+        let counter = -1
+        function display_question(quest_num=0, state){
+            // there are 3 states; 0=default, 1=next,two=prev
+            switch (state) {
+                case 0:
+                    // quest_num++
+                    break;
+                case 1:
+                    if(counter<pages-1){
+                        counter++
+                    }else{
+                        counter= pages-1
+                    }
+                    // console.log(`counter in switch is ${counter}`)
+                    break;
+                case 2:
+                    if(counter<1){
+                        counter=0
+                    }else{
+                        counter--
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
+            console.log(`state is ${state}`)
+            console.log(`counter is ${counter}`)
+            for (const [question,options] of Object.entries(all_questions[counter || quest_num])){
+                console.log('question= ',question)
+                quizBox.innerHTML = `
+                    <hr class="ques" >
+                    <div class="mb-2 ques" >
+                        <b>${question}</b>
+                    </div>
+                `
+                for (const option of options){
+                    quizBox.innerHTML += `
+                        <div>
+                            <input type="radio" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
+                            <label for="${question}"  class="answer">${option}</label>
+                        </div>
+                
+                        `
+                }
+            }
+            
+        }
+"""

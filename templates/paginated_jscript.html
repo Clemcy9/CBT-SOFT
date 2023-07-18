@@ -6,6 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .inactive{
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h3>testing static fileswss</h3>
@@ -14,8 +19,10 @@
     <div>
         <div id="quiz_box">
         </div>
-        <button id="next" onclick="display_question(0,1)">next</button>
+        <div id="pages">
+        </div>
         <button id="prev" onclick="display_question(0,2)">prev</button>
+        <button id="next" onclick="display_question(0,1)">next</button>
     </div>
     
     <script type="module">
@@ -26,21 +33,54 @@
         let all_questions_db = await makeRequest("{% url 'paginated_quiz:get_questions' %}",'get')
         // actual cleaned questions
         let all_questions = all_questions_db['questions']
-        // variable to count nos of question and use as page nos
-        let pages = all_questions.length
-        console.log('pages =',pages)
+        
+
         // variable for user response
         let user_question_choice = {}
         // array for all user response
         let user_response = []
 
+        // load all questions
+        function load_questions(){
+            // variable for question numbering
+            let q_num =0
+            all_questions.forEach(q => {
+                let question_div = document.createElement('div')
+                question_div.classList.add('questions','inactive')
+                quizBox.appendChild(question_div)
+                // Object.entries is similar to dict.items in python that returns key,value
+                for (const [question,options] of Object.entries(q)){
+                    q_num++
+                    // console.log('question= ',question)
+                    question_div.innerHTML = `
+                        <hr class="ques" >
+                        <div class="mb-2 ques" >
+                            <b>${q_num}.${question}</b>
+                        </div>
+                    `
+                    for (const option of options){
+                        question_div.innerHTML += `
+                            <div>
+                                <input type="radio" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
+                                <label for="${question}"  class="answer">${option}</label>
+                            </div>
+                    
+                            `
+                    }
+                }
+            }); 
+        }
+        load_questions()
+
         // function that take question num and renders question-options on screeen
         let counter = -1
+        // get all the questions div
+        let q_div = document.querySelectorAll('.questions')
         function display_question(quest_num=0, state){
             // there are 3 states; 0=default, 1=next,two=prev
             switch (state) {
-                case 0:
-                    // quest_num++
+                case -1:
+                    // counter=0
                     break;
                 case 1:
                     if(counter<pages-1){
@@ -59,29 +99,35 @@
                     break;
             
                 default:
+                    counter=0
                     break;
             }
+            console.log(`quest_num is ${quest_num}`)
             console.log(`state is ${state}`)
             console.log(`counter is ${counter}`)
-            for (const [question,options] of Object.entries(all_questions[counter || quest_num])){
-                console.log('question= ',question)
-                quizBox.innerHTML = `
-                    <hr class="ques" >
-                    <div class="mb-2 ques" >
-                        <b>${question}</b>
-                    </div>
-                `
-                for (const option of options){
-                    quizBox.innerHTML += `
-                        <div>
-                            <input type="radio" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
-                            <label for="${question}"  class="answer">${option}</label>
-                        </div>
-                
-                        `
-                }
-            }
+
+            // add inactive class to all questions again
+            q_div.forEach(x=>x.classList.add('inactive'))
             
+            // make the selected question index visible
+            let index_question = q_div[counter || quest_num]
+            // check if quest_num, give value to counter, this aids in next/prev from current active page
+            counter = quest_num?quest_num:counter
+            index_question.classList.toggle('inactive')
+  
+        }
+
+        // variable to count nos of question and use as page nos
+        let pages = all_questions.length
+        console.log('pages =',pages)
+        // get pages div
+        let pages_div = document.querySelector('#pages')
+        // create buttons equivalent to page numbers
+        for(let i =1; i<=pages; i++){
+            let btn = document.createElement('button')
+            btn.innerText=i
+            pages_div.append(btn)
+            btn.addEventListener("click",function(){display_question(i-1,0)})
         }
 
         window.display_question = display_question
