@@ -21,19 +21,29 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
 
+        }
+        #quiz_box{
+            width: 80vw;
+        }
+        #nav{
+            position: fixed;
+            bottom: 0em;
+            display: flex;
+            flex-direction: column;
         }
         #navigator{
             display: flex;
             margin: .5em auto;
         }
         #pages{
-            border: red 2px solid;
-            padding: 0;
+            /* border: red 2px solid; */
+            padding: auto;
         }
 
         #pages button{
-            background-color: yellowgreen;
+            /* background-color: yellowgreen; */
             box-sizing: border-box;
             width: 2.2em;
             padding: 0;
@@ -48,12 +58,15 @@
     <div id="parent">
         <div id="quiz_box">
         </div>
-        <div id="navigator">
-            <button id="prev" onclick="display_question(0,2)">prev</button>
-            <button id="next" onclick="display_question(0,1)">next</button>
+        <div id="nav">
+            <div id="navigator">
+                <button id="prev" onclick="display_question(0,2)">prev</button>
+                <button id="next" onclick="display_question(0,1)">next</button>
+            </div>
+            <div id="pages">
+            </div>
         </div>
-        <div id="pages">
-        </div>
+        
         
     </div>
     
@@ -72,6 +85,8 @@
         // array for all user response
         let user_response = []
 
+        
+
         // load all questions
         function load_questions(){
             // variable for question numbering
@@ -85,6 +100,7 @@
                     q_num++
                     // console.log('question= ',question)
                     question_div.innerHTML = `
+                        <button id="prev" onclick="decorator(${q_num},3)">flag</button>
                         <hr class="ques" >
                         <div class="mb-2 ques" >
                             <b>${q_num}.${question}</b>
@@ -93,7 +109,7 @@
                     for (const option of options){
                         question_div.innerHTML += `
                             <div>
-                                <input type="radio" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
+                                <input type="radio" onclick="decorator(${q_num},1)" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
                                 <label for="${question}"  class="answer">${option}</label>
                             </div>
                     
@@ -158,36 +174,33 @@
         for(let i =1; i<=pages; i++){
             let btn = document.createElement('button')
             btn.innerText=i
+            btn.classList.add('p_num')
             pages_div.append(btn)
             btn.addEventListener("click",function(){display_question(i-1,0)})
         }
 
-        window.display_question = display_question
+        // function to color pages if answer or not
+        function decorator(element_id,code){
+            // console.log(`element id is ${element_id}`)
+            let element = document.querySelectorAll(".p_num")[element_id-1]
+            switch (code) {
+                case 1:
+                    element.style.backgroundColor = 'blue'
+                    break;
+                case 2:
+                    element.style.backgroundColor = 'yellow'
+                    break;
+                case 3:
+                    element.style.backgroundColor = 'red'
+                    break;
 
-        /*
-        all_questions['questions'].forEach(x =>{
-            for (const [question,answers] of Object.entries(x)){
-                console.log('question= ',question)
-                quizBox.innerHTML += `
-                    <hr class="ques" >
-                    <div class="mb-2 ques" >
-                        <b>${question}</b>
-                    </div>
-                `
-                for( let answer of answers){
-                    console.log('answer= ',answer)
-                    quizBox.innerHTML += `
-                        <div>
-                            <input type="radio" class="ans"  id="${question}-${answer}" name="${question}" value="${answer}">
-                            <label for="${question}"  class="answer">${answer}</label>
-                        </div>
-                
-                        `
-                }
-                
-            }           
-        })
-        */
+                default:
+                    break;
+            }
+            
+        }
+        window.decorator = decorator
+        window.display_question = display_question
 
         
         window.console.log(all_questions)
