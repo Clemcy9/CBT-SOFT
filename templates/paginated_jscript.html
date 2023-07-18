@@ -10,14 +10,13 @@
 <body>
     <h3>testing static fileswss</h3>
     <img src="{% static 'my_app/example.jpg' %}" alt="My image">
-    <form action="#">
-        <div>
-            <div id="quiz_box">
-            </div>
-            <button id="next" onclick="display_question(0,1)">next</button>
-            <button id="prev" onclick="display_question(0,2)">prev</button>
+    
+    <div>
+        <div id="quiz_box">
         </div>
-    </form>
+        <button id="next" onclick="display_question(0,1)">next</button>
+        <button id="prev" onclick="display_question(0,2)">prev</button>
+    </div>
     
     <script type="module">
         import {makeRequest} from "{% static 'static_files/main.js' %}"
