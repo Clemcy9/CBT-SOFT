@@ -29,7 +29,7 @@
         }
         #nav{
             position: fixed;
-            bottom: 0em;
+            bottom: 1em;
             display: flex;
             flex-direction: column;
         }
@@ -48,10 +48,21 @@
             width: 2.2em;
             padding: 0;
         }
+        #toolbar{
+            border: red 2px solid;
+            /* width: 80vw; */
+            display: flex;
+            justify-content: space-between;
+
+        }
         
     </style>
 </head>
 <body>
+    <div id="toolbar">
+        <button>timer</button>
+        <button onclick="gather_report()">Submit</button>
+    </div>
     <h3>testing static fileswss</h3>
     <img src="{% static 'my_app/example.jpg' %}" alt="My image">
     
@@ -75,16 +86,11 @@
         
         let quizBox = document.querySelector("#quiz_box")
         // all question_options pair array from db
+
         let all_questions_db = await makeRequest("{% url 'paginated_quiz:get_questions' %}",'get')
         // actual cleaned questions
         let all_questions = all_questions_db['questions']
-        
-
-        // variable for user response
-        let user_question_choice = {}
-        // array for all user response
-        let user_response = []
-
+        // data format [{question_content:[choice_content,choice_id, question_id]}]
         
 
         // load all questions
@@ -109,8 +115,8 @@
                     for (const option of options){
                         question_div.innerHTML += `
                             <div>
-                                <input type="radio" onclick="decorator(${q_num},1)" class="ans"  id="${question}-${option}" name="${question}" value="${option}">
-                                <label for="${question}"  class="answer">${option}</label>
+                                <input type="radio" onclick="decorator(${q_num},1)" class="ans"  id="choice${option[1]}" name="${option[2]}" value="${option[1]}">
+                                <label for="${option[2]}"  class="answer">${option[0]}</label>
                             </div>
                     
                             `
@@ -201,6 +207,28 @@
         }
         window.decorator = decorator
         window.display_question = display_question
+
+        // get all input tag with ans class
+        let choices = document.querySelectorAll('.ans')
+        
+        // function to record user attempt
+        function gather_report(){
+            // array for all user response
+            let user_response = []
+            // step through all the choices and get question_id with user choice
+            for (let choice of choices){
+                // variable for user response
+                if(choice.checked){
+                    let q_id = choice.name
+                    let user_question_choice = {}
+                    user_question_choice[q_id] =choice.value
+                    user_response.push(user_question_choice)
+                }
+            }
+            console.log(user_response)
+        }
+        window.gather_report = gather_report
+
 
         
         window.console.log(all_questions)

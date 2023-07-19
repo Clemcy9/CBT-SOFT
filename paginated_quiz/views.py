@@ -55,12 +55,14 @@ def jscript_quiz(request):
 def get_questions(request):
     questions_db = Question.objects.all()[:20]
     
+    # sending  question content, choice content, choice id and question id in a list
+    # {question_content:[choice_content,choice_id,question_id]}
     questions = []
     for q in questions_db:
         answer =[]
         for a in q.choice_set.all():
-            answer.append(a.content)
+            answer.append([a.content,a.id,q.id])
         questions.append({q.content:answer})
     # json_data = serializers.serialize('json',questions)
-    # print(f'question and choice are {questions}')
+    print(f'question and choice are {questions}')
     return JsonResponse({'questions':questions}, safe=False)
