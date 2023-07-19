@@ -63,8 +63,7 @@
         <button>timer</button>
         <button onclick="gather_report()">Submit</button>
     </div>
-    <h3>testing static fileswss</h3>
-    <img src="{% static 'my_app/example.jpg' %}" alt="My image">
+    <!-- <img src="{% static 'my_app/example.jpg' %}" alt="My image"> -->
     
     <div id="parent">
         <div id="quiz_box">
@@ -84,9 +83,12 @@
     <script type="module">
         import {makeRequest} from "{% static 'static_files/main.js' %}"
         
+        // html elements
         let quizBox = document.querySelector("#quiz_box")
-        // all question_options pair array from db
+        let next = document.querySelector("#next")
+        let prev = document.querySelector("#prev")
 
+        // all question_options pair array from db
         let all_questions_db = await makeRequest("{% url 'paginated_quiz:get_questions' %}",'get')
         // actual cleaned questions
         let all_questions = all_questions_db['questions']
@@ -106,7 +108,7 @@
                     q_num++
                     // console.log('question= ',question)
                     question_div.innerHTML = `
-                        <button id="prev" onclick="decorator(${q_num},3)">flag</button>
+                        <button onclick="decorator(${q_num},3)">flag</button>
                         <hr class="ques" >
                         <div class="mb-2 ques" >
                             <b>${q_num}.${question}</b>
@@ -140,6 +142,7 @@
                     if(counter<pages-1){
                         counter++
                     }else{
+                        // end of the upper question limit
                         counter= pages-1
                     }
                     // console.log(`counter in switch is ${counter}`)
@@ -165,8 +168,20 @@
             
             // make the selected question index visible
             let index_question = q_div[counter || quest_num]
+
             // check if quest_num, give value to counter, this aids in next/prev from current active page
             counter = quest_num?quest_num:counter
+            // disable next or prev btn based on counter @ upper or lower quiz limit
+            if(counter===pages-1){
+                // @ upper question limit
+                next.disabled = true
+            }else if(counter===0){
+                // @ lower question limit
+                prev.disabled = true
+            }else{
+                next.disabled =false
+                prev.disabled = false
+            }
             index_question.classList.toggle('inactive')
   
         }
@@ -212,6 +227,8 @@
         let choices = document.querySelectorAll('.ans')
         
         // function to record user attempt
+        // gather_report create an array of objects contain question_id: choice_id
+        // [{question_id : choice_id}]
         function gather_report(){
             // array for all user response
             let user_response = []
@@ -220,7 +237,7 @@
                 // variable for user response
                 if(choice.checked){
                     let q_id = choice.name
-                    let user_question_choice = {}
+                    let user_question_choice = new Object()
                     user_question_choice[q_id] =choice.value
                     user_response.push(user_question_choice)
                 }

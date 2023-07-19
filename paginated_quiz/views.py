@@ -64,5 +64,5 @@ def get_questions(request):
             answer.append([a.content,a.id,q.id])
         questions.append({q.content:answer})
     # json_data = serializers.serialize('json',questions)
-    print(f'question and choice are {questions}')
+    # print(f'question and choice are {questions}')
     return JsonResponse({'questions':questions}, safe=False)
