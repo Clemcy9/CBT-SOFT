@@ -53,6 +53,10 @@ def jscript_quiz(request):
     return render(request,'paginated_jscript.html')
 
 def get_questions(request):
+    if request.method == 'POST':
+        u_res = request.POST
+        print(f'user response is: {u_res}')
+        return HttpResponse('submitted')
     questions_db = Question.objects.all()[:20]
     
     # sending  question content, choice content, choice id and question id in a list

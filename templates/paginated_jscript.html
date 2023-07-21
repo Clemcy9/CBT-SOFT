@@ -59,15 +59,17 @@
     </style>
 </head>
 <body>
-    <div id="toolbar">
-        <button>timer</button>
-        <button onclick="gather_report()">Submit</button>
-    </div>
+    
     <!-- <img src="{% static 'my_app/example.jpg' %}" alt="My image"> -->
     
     <div id="parent">
-        <div id="quiz_box">
-        </div>
+        <form action="{% url 'paginated_quiz:get_questions' %}" method="post" id="quiz_box">
+            {% csrf_token %}
+            <div id="toolbar">
+                <button>timer</button>
+                <button onclick="gather_report()" type="submit">Submit</button>
+            </div>
+        </form>
         <div id="nav">
             <div id="navigator">
                 <button id="prev" onclick="display_question(0,2)">prev</button>
@@ -159,9 +161,9 @@
                     counter=0
                     break;
             }
-            console.log(`quest_num is ${quest_num}`)
-            console.log(`state is ${state}`)
-            console.log(`counter is ${counter}`)
+            // console.log(`quest_num is ${quest_num}`)
+            // console.log(`state is ${state}`)
+            // console.log(`counter is ${counter}`)
 
             // add inactive class to all questions again
             q_div.forEach(x=>x.classList.add('inactive'))
@@ -240,6 +242,11 @@
                     let user_question_choice = new Object()
                     user_question_choice[q_id] =choice.value
                     user_response.push(user_question_choice)
+                }else{
+                    // if not option not checked, check if question_id of choice is already registered
+                    // in user_response array, if not, add question id with null as choice_id
+                    console.log('runnig else block')
+                   
                 }
             }
             console.log(user_response)
