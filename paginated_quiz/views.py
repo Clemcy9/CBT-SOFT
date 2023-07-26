@@ -49,14 +49,17 @@ def formset_quiz(request):
     return render(request, 'paginated_quiz.html', {'page_obj': page_obj})
 
 def jscript_quiz(request):
+    if request.method == 'POST':
+        response = dict(request.POST)
+        # print(f'user response is: {response}')
+        response.pop('csrfmiddlewaretoken')
+        print(f'cleaned response is: {response}')
+        return HttpResponse('submitted')
     
-    return render(request,'paginated_jscript.html')
+    return render(request,'paginated_jscript.html',{'time_left':0.4})
 
 def get_questions(request):
-    if request.method == 'POST':
-        u_res = request.POST
-        print(f'user response is: {u_res}')
-        return HttpResponse('submitted')
+    
     questions_db = Question.objects.all()[:20]
     
     # sending  question content, choice content, choice id and question id in a list

@@ -63,11 +63,13 @@
     <!-- <img src="{% static 'my_app/example.jpg' %}" alt="My image"> -->
     
     <div id="parent">
-        <form action="{% url 'paginated_quiz:get_questions' %}" method="post" id="quiz_box">
+        <form action="{% url 'paginated_quiz:js_quiz' %}" method="post" id="quiz_box">
             {% csrf_token %}
+            <input type="hidden" id="total_question" name="total_question">
             <div id="toolbar">
-                <button>timer</button>
-                <button onclick="gather_report()" type="submit">Submit</button>
+                <button type="submit" id="submit">Submit</button>
+                <h3 style="text-align: end; margin: 0; padding: 0.2em; background-color: blueviolet;"><strong id="time-left-min"></strong>:<strong id="time-left-secs"></strong>
+    
             </div>
         </form>
         <div id="nav">
@@ -83,10 +85,11 @@
     </div>
     
     <script type="module">
-        import {makeRequest} from "{% static 'static_files/main.js' %}"
+        import {makeRequest, load_questions} from "{% static 'static_files/main.js' %}"
         
         // html elements
         let quizBox = document.querySelector("#quiz_box")
+        let hidden_tag = document.querySelector("#total_question")
         let next = document.querySelector("#next")
         let prev = document.querySelector("#prev")
 
@@ -97,38 +100,8 @@
         // data format [{question_content:[choice_content,choice_id, question_id]}]
         
 
-        // load all questions
-        function load_questions(){
-            // variable for question numbering
-            let q_num =0
-            all_questions.forEach(q => {
-                let question_div = document.createElement('div')
-                question_div.classList.add('questions','inactive')
-                quizBox.appendChild(question_div)
-                // Object.entries is similar to dict.items in python that returns key,value
-                for (const [question,options] of Object.entries(q)){
-                    q_num++
-                    // console.log('question= ',question)
-                    question_div.innerHTML = `
-                        <button onclick="decorator(${q_num},3)">flag</button>
-                        <hr class="ques" >
-                        <div class="mb-2 ques" >
-                            <b>${q_num}.${question}</b>
-                        </div>
-                    `
-                    for (const option of options){
-                        question_div.innerHTML += `
-                            <div>
-                                <input type="radio" onclick="decorator(${q_num},1)" class="ans"  id="choice${option[1]}" name="${option[2]}" value="${option[1]}">
-                                <label for="${option[2]}"  class="answer">${option[0]}</label>
-                            </div>
-                    
-                            `
-                    }
-                }
-            }); 
-        }
-        load_questions()
+       
+        load_questions(all_questions,quizBox)
 
         // function that take question num and renders question-options on screeen
         let counter = -1
@@ -227,11 +200,12 @@
 
         // get all input tag with ans class
         let choices = document.querySelectorAll('.ans')
+        hidden_tag.value= all_questions.length
         
         // function to record user attempt
         // gather_report create an array of objects contain question_id: choice_id
         // [{question_id : choice_id}]
-        function gather_report(){
+        function gather_report(choices,no_question){
             // array for all user response
             let user_response = []
             // step through all the choices and get question_id with user choice
@@ -253,8 +227,33 @@
         }
         window.gather_report = gather_report
 
+        // timer
+        const timeLeftmin = document.querySelector('#time-left-min');
+        const timeLeftsec = document.querySelector('#time-left-secs');
+        const submit = document.querySelector('#submit');
+        let timeLeft = {{time_left}} *60 ; //convert min to secs
+        let min = 0;
+        let secs = 0;
+        function countDown() {
+            setInterval(function () {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    // let post =
+                    min = Math.floor(timeLeft/60) // minute only half of the countdown
+                    secs= Math.round(((timeLeft/60)-min)*60) // seconds only half of the countdown
+                    timeLeftmin.innerHTML = min
+                    timeLeftsec.innerHTML = secs
+                }
+                if (timeLeft <= 0) {
+                    // submit.attr("disabled", true);
+                    clearInterval()
+                    timeLeft = 0
+                    // submit.click()
+                }
+            }, 1000)
+        }
+        countDown()
 
-        
         window.console.log(all_questions)
 
         // window.send_data = send_data

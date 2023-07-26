@@ -310,4 +310,24 @@ class Result(models.Model):
     def __str__(self) -> str:
         return self.student.first_name
 
+# custom functions
+'''
+questions = []
+    for q in questions_db:
+        answer =[]
+        for a in q.choice_set.all():
+            answer.append([a.content,a.id,q.id])
+        questions.append({q.content:answer})
+'''
+def json_quest_choice_pair(question_query_set):
+    """
+    generate questions and send them in following format
+    questions = [{question.text:[choice.text, choice.id, question.id ]}]
+    """
+    questions = []
+    for question in question_query_set:
+        answer =[]
+        for choice in question.choice_set.all():
+            answer.append([choice.content,choice.id,question.id])
+        questions.append({question.content:answer})
 
