@@ -1,3 +1,4 @@
+from cbt_app.models import Choice
 import re
 
 # regex below matches 1 to infinix *(1000) digit at the end of a string
@@ -41,7 +42,7 @@ def question_choice_pair(querydict):
             print('no match found')
     return question_answer_pair,all_questions
 
-def mark_quiz(result, model):
+def mark_quiz(result, model =Choice):
     my_result = []
     for question,choice in result.items():
         try:
