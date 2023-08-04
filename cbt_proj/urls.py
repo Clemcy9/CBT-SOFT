@@ -17,6 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+# for api view
+from api import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'api',views.QuestionView )
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('quiz/', include('cbt_app.urls')),
@@ -24,6 +31,8 @@ urlpatterns = [
     path('files/',include('file_processing.urls')),
     path('paginated/',include('paginated_quiz.urls')),
     path('create_quiz/',include('create_quiz.urls')),
-    path('', view=RedirectView.as_view(url='auth1/login'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('',include(router.urls)),
+    path('', view=RedirectView.as_view(url='auth1/login')),
     
 ]

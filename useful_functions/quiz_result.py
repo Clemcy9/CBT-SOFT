@@ -63,7 +63,9 @@ def score(marks,no_of_questions):
     percent_score = (points/total_questions)*100
     return percent_score
     
-
+def result(user_response):
+    user_marks = mark_quiz(user_response)
+    user_score = score(user_marks)
 # # testing
 # content3 ={
 #     'csrfmiddlewaretoken': ['JsL0S1OoeGKJlomeW27jg4orwLM0v57etUWcuL9ncJAuN77PSceRSPTo8eintTdz'], 'question2': ['2'], 

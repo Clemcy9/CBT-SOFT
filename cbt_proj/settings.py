@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'file_processing',
     'ckeditor',
     'paginated_quiz',
+    'api',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
